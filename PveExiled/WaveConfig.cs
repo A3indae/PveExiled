@@ -116,7 +116,7 @@ public class WaveConfig
                     {
                         new EnemySpawnInfo("ClassD", 5, 5),
                         new EnemySpawnInfo("Scout", 4, 12),
-                        new EnemySpawnInfo("Pyromancer", 1, 3),
+                        new EnemySpawnInfo("Pyromancer", 1, 3.5f),
                     },
                     supplyGiveInfos: new List<ItemType>(){ ItemType.SCP500, ItemType.Adrenaline, ItemType.Ammo9x19, ItemType.Ammo556x45, ItemType.Ammo9x19, ItemType.Ammo9x19 }
             ),
@@ -134,7 +134,7 @@ public class WaveConfig
                     },
                     enemySpawnInfos: new List<EnemySpawnInfo>
                     {
-                        new EnemySpawnInfo("Cloaker", 1, 3),
+                        new EnemySpawnInfo("Cloaker", 1, 3.8f),
                         new EnemySpawnInfo("Scout", 6, 25),
                     },
                     supplyGiveInfos: new List<ItemType>(){ ItemType.GunCrossvec, ItemType.Medkit, ItemType.Ammo9x19, ItemType.Ammo556x45, ItemType.Ammo9x19, ItemType.Ammo9x19 }
@@ -193,7 +193,7 @@ public class WaveConfig
                         new EnemySpawnInfo("Cloaker", 1, 5),
                         new EnemySpawnInfo("Scout", 6, 35),
                         new EnemySpawnInfo("Tranquilizer", 1, 6),
-                        new EnemySpawnInfo("Pyromancer", 1, 3),
+                        new EnemySpawnInfo("Pyromancer", 1, 3.5f),
                     },
                     supplyGiveInfos: new List<ItemType>(){ ItemType.GunAK, ItemType.Medkit, ItemType.Ammo9x19, ItemType.Ammo556x45, ItemType.Ammo9x19, ItemType.Ammo9x19 }
             ),
@@ -210,7 +210,7 @@ public class WaveConfig
                     enemySpawnInfos: new List<EnemySpawnInfo>
                     {
                         new EnemySpawnInfo("Scout", 10, 40),
-                        new EnemySpawnInfo("Juggernaut", 1, 2),
+                        new EnemySpawnInfo("Juggernaut", 1, 2.8f),
                     },
                     supplyGiveInfos: new List<ItemType>(){ ItemType.GunAK, ItemType.Medkit, ItemType.Ammo9x19, ItemType.Ammo556x45, ItemType.Ammo9x19, ItemType.Ammo9x19 }
             ),
@@ -228,7 +228,7 @@ public class WaveConfig
                     {
                         new EnemySpawnInfo("Cloaker", 2, 8),
                         new EnemySpawnInfo("Scout", 10, 30),
-                        new EnemySpawnInfo("Pyromancer", 1, 2),
+                        new EnemySpawnInfo("Pyromancer", 1, 2.8f),
                     },
                     supplyGiveInfos: new List<ItemType>(){ ItemType.GunCrossvec, ItemType.Medkit, ItemType.Ammo9x19, ItemType.Ammo556x45, ItemType.Ammo9x19, ItemType.Ammo9x19 }
             ),
