@@ -188,7 +188,7 @@ public class RoundHandler
 
             foreach (WaveConfig.EnemySpawnInfo spawnInfo in waveInfo.EnemySpawnInfos)//적 스폰
             {
-                for (int i = 0; i < (int)(spawnInfo.Amount + mulCount * spawnInfo.Amount * waveConfig.EnemyMultiplyPerPlayers); i++)
+                for (int i = 0; i < (int)(spawnInfo.Amount + mulCount * spawnInfo.EnemyPerPlayer); i++)
                 {
                     SpawnEnemy(spawnInfo.EnemyName);
                     yield return Timing.WaitForSeconds(0.8f);
