@@ -14,6 +14,7 @@ using Exiled.API.Enums;
 using MEC;
 using RelativePositioning;
 using PlayerRoles.FirstPersonControl;
+using System.Linq;
 
 public class Enemy
 {
@@ -109,7 +110,7 @@ public class Enemy
                 while (!finished && Time.time - timeStamp <= 4) { if (!followEnabled) { timeStamp = Time.time; } yield return Timing.WaitForSeconds(pathCompCheckTime); }
                 if (Time.time - timeStamp > 4)
                 {
-                    selfPlayer.Position = selfPlayer.CurrentRoom.Position + Vector3.up;
+                    AntiStock();
                     break;
                 }
             }
@@ -151,7 +152,7 @@ public class Enemy
         {
             if (path.status == NavMeshPathStatus.PathComplete) return path.corners; // 경로 지점들 반환
         }
-        selfPlayer.Position = selfPlayer.CurrentRoom.Position + Vector3.up;//낌 방지
+        AntiStock();//낌방지
         return null;//아님말고
     }
     protected bool IsTargetablePlayer(Player player)
@@ -161,5 +162,16 @@ public class Enemy
         if (player.Role.Type != RoleTypeId.NtfSergeant) return false;
         if (!hiddenDetect && player.IsEffectActive<Invisible>()) return false;
         return true;
+    }
+    private void AntiStock()
+    {
+        if (selfPlayer.CurrentRoom.Type == RoomType.EzCollapsedTunnel || selfPlayer.CurrentRoom.Type == RoomType.EzShelter)
+        {
+            selfPlayer.Position = selfPlayer.CurrentRoom.Doors.First().Position + Vector3.up;
+        }
+        else
+        {
+            selfPlayer.Position = selfPlayer.CurrentRoom.Position + Vector3.up;//낌 방지
+        }
     }
 }

@@ -155,7 +155,7 @@ public class RoundHandler
             DummyUtils.DestroyAllDummies();
             waveConfig.MulCount = Player.Count-1;
             int mulCount = waveConfig.MulCount;
-            if ((wave+1) % 5 == 0)
+            if ((wave+1) % 3 == 0)
             {
                 SpawnPlayers();
                 Map.CleanAllItems();
@@ -167,7 +167,7 @@ public class RoundHandler
                 for (int i = 0; i < (int)(itemInfo.Amount + mulCount * itemInfo.Amount * waveConfig.SupplyMultiplyPerPlayers); i++)
                 {
                     Pickup pickup = Pickup.Create(itemInfo.Type);
-                    pickup.Position = playerSpawnPoint;
+                    pickup.Position = playerSpawnPoint + new Vector3(UnityEngine.Random.value*5-2.5f,3, UnityEngine.Random.value * 5 - 2.5f);
                     pickup.Spawn();
                 }
             }
@@ -220,7 +220,7 @@ public class RoundHandler
                 player.ClearInventory();
                 player.Position = playerSpawnPoint;
                 player.Inventory.ServerAddItem(ItemType.GunCOM18, InventorySystem.Items.ItemAddReason.AdminCommand);
-                player.Inventory.ServerAddAmmo(ItemType.Ammo9x19, 40);
+                player.Inventory.ServerAddAmmo(ItemType.Ammo9x19, 120);
                 player.EnableEffect<HeavyFooted>(255, -1, false);
             });
         }
