@@ -153,14 +153,14 @@ public class RoundHandler
             Exiled.API.Features.Map.Clean(Decals.DecalPoolType.GlassCrack);
             
             DummyUtils.DestroyAllDummies();
-            waveConfig.MulCount = Player.Count-1;
-            int mulCount = waveConfig.MulCount;
-            if ((wave+1) % 3 == 0)
+            if (wave == 0 || (wave+1) % 3 == 0)
             {
                 SpawnPlayers();
                 Map.CleanAllItems();
             }
-
+            yield return Timing.WaitForSeconds(1);
+            waveConfig.MulCount = GetAlivePlayerCount() -1;
+            int mulCount = waveConfig.MulCount;
             Map.ShowHint("PlayerCount: " + (mulCount + 1), duration: 10);
             foreach (WaveConfig.SupplySpawnInfo itemInfo in waveInfo.SupplySpawnInfos)//보급품
             {
@@ -194,7 +194,7 @@ public class RoundHandler
 
             foreach (WaveConfig.EnemySpawnInfo spawnInfo in waveInfo.EnemySpawnInfos)//적 스폰
             {
-                for (int i = 0; i < (int)(spawnInfo.Amount + mulCount * spawnInfo.Amount * waveConfig.EnemyMultiplyPerPlayers); i++)
+                for (int i = 0; i < (int)(spawnInfo.Amount + mulCount * spawnInfo.EnemyPerPlayer); i++)
                 {
                     SpawnEnemy(spawnInfo.EnemyName);
                     yield return Timing.WaitForSeconds(0.8f);
