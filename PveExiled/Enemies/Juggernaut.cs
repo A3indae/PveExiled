@@ -47,9 +47,9 @@ namespace Enemies
         InventorySystem.Items.Firearms.Modules.MagazineModule magModule;
         public Juggernaut(string enemyName, Vector3 spawnPos, int id, Dictionary<int, Enemy> container, int mulCount) : base(enemyName, spawnPos, id, container, mulCount)
         {
-            selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ChaosConscript);
+            selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ChaosConscript, SpawnReason.ForceClass);
             selfPlayer.EnableEffect<Slowness>(30, -1, false);
-            selfPlayer.EnableEffect<SpawnProtected>(5, true);
+            selfPlayer.EnableEffect<SpawnProtected>(3, true);
             selfPlayer.ClearInventory();
             selfPlayer.MaxHealth = 500 + mulCount*50;//35명 -> 2250HP
             selfPlayer.Health = 500 + mulCount * 50;

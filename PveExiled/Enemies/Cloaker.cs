@@ -41,8 +41,7 @@ namespace Enemies
         InventorySystem.Items.Jailbird.JailbirdItem firearm;
         public Cloaker(string enemyName, Vector3 spawnPos, int id, Dictionary<int, Enemy> container, int mulCount) : base(enemyName, spawnPos, id, container, mulCount)
         {
-            selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ChaosConscript);
-            selfPlayer.EnableEffect<SpawnProtected>(5, true);
+            selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ChaosConscript, SpawnReason.ForceClass);
             selfPlayer.EnableEffect<Invisible>(-1, false);
             selfPlayer.ClearInventory();
             selfPlayer.MaxHealth = 100;

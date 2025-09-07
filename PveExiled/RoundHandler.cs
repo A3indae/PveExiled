@@ -15,6 +15,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using AdminToys;
 using Mirror;
+using mbc = MultiBroadcast;
 
 using PlayerEvents = Exiled.Events.Handlers.Player;
 using ServerEventArgs = Exiled.Events.EventArgs.Server;
@@ -161,7 +162,7 @@ public class RoundHandler
             yield return Timing.WaitForSeconds(1);
             waveConfig.MulCount = GetAlivePlayerCount() -1;
             int mulCount = waveConfig.MulCount;
-            Map.ShowHint("PlayerCount: " + (mulCount + 1), duration: 10);
+            Map.ShowHint("살아있는 플레이어 수: " + (mulCount + 1), duration: 10);
             foreach (WaveConfig.SupplySpawnInfo itemInfo in waveInfo.SupplySpawnInfos)//보급품
             {
                 for (int i = 0; i < (int)(itemInfo.Amount + mulCount * itemInfo.Amount * waveConfig.SupplyMultiplyPerPlayers); i++)
@@ -187,10 +188,11 @@ public class RoundHandler
 
             for (int i = waveInfo.IntermissionTime; i > 0 ; i--)//타이머
             {
-                Map.Broadcast(message: i.ToString(), duration: 1);
-                yield return Timing.WaitForSeconds(1);
+                //mbc.API.MultiBroadcast.AddMapBroadcast(duration: 1, text: $"다음 웨이브까지 남은 시간: {i}");
+                mbc.API.MultiBroadcast.AddMapBroadcast(1, $"<size=20>다음 웨이브까지 남은 시간: {i}</size>");
+                yield return Timing.WaitForSeconds(1f);
             }
-            Map.Broadcast(message: waveInfo.BCtext, duration: 10);
+            mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: waveInfo.BCtext);
 
             foreach (WaveConfig.EnemySpawnInfo spawnInfo in waveInfo.EnemySpawnInfos)//적 스폰
             {
@@ -213,7 +215,7 @@ public class RoundHandler
         {
             if (!IsValidPlayer(player)) continue;
             if (player.Role.Type == RoleTypeId.NtfSergeant) continue;
-            player.Role.Set(RoleTypeId.NtfSergeant);
+            player.Role.Set(RoleTypeId.NtfSergeant, SpawnReason.ForceClass);
             Timing.CallDelayed(0.5f, () =>
             {
                 if (player == null || player.Role.Type != RoleTypeId.NtfSergeant) return;

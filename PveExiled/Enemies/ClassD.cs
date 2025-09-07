@@ -38,10 +38,10 @@ namespace Enemies
         InventorySystem.Items.Firearms.Modules.MagazineModule magModule;
         public ClassD(string enemyName, Vector3 spawnPos, int id, Dictionary<int, Enemy> container, int mulCount) : base(enemyName, spawnPos, id, container, mulCount)
         {
-            selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ClassD);
+            selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ClassD, SpawnReason.ForceClass);
             selfPlayer.EnableEffect<MovementBoost>(30, -1, false);
             selfPlayer.EnableEffect<SilentWalk>(200, -1, false);
-            selfPlayer.EnableEffect<SpawnProtected>(5, true);
+            selfPlayer.EnableEffect<SpawnProtected>(3, true);
             selfPlayer.ClearInventory();
             selfPlayer.MaxHealth = 80 + mulCount*5;//35명 -> 255HP
             selfPlayer.Health = 80 + mulCount * 5;

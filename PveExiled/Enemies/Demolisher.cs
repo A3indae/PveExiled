@@ -36,10 +36,9 @@ namespace Enemies
         DummyAction? useAction;
         public Demolisher(string enemyName, Vector3 spawnPos, int id, Dictionary<int, Enemy> container, int mulCount) : base(enemyName, spawnPos, id, container, mulCount)
         {
-            selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ClassD);
+            selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ClassD, SpawnReason.ForceClass);
             selfPlayer.EnableEffect<MovementBoost>(35, -1, false);
             selfPlayer.EnableEffect<Scp207>(1, -1, false);
-            selfPlayer.EnableEffect<SpawnProtected>(5, true);
             selfPlayer.ClearInventory();
             selfPlayer.MaxHealth = 100 + mulCount*5;//35명 -> 275HP
             selfPlayer.Health = 100 + mulCount * 5;

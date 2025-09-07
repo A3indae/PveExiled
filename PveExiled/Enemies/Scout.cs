@@ -42,8 +42,8 @@ namespace Enemies
         InventorySystem.Items.Firearms.Modules.MagazineModule magModule;
         public Scout(string enemyName, Vector3 spawnPos, int id, Dictionary<int, Enemy> container, int mulCount) : base(enemyName, spawnPos, id, container, mulCount)
         {
-            selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ChaosConscript);
-            selfPlayer.EnableEffect<SpawnProtected>(5, true);
+            selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ChaosConscript, SpawnReason.ForceClass);
+            selfPlayer.EnableEffect<SpawnProtected>(3, true);
             selfPlayer.ClearInventory();
             selfPlayer.MaxHealth = 100 + mulCount*5;//35명 -> 275HP
             selfPlayer.Health = 100 + mulCount * 5;

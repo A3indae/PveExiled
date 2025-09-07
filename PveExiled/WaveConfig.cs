@@ -104,7 +104,7 @@ public class WaveConfig
             ),
             new WaveInfo(
                     intermissionTime: 20,
-                    bcText: "<color='red'>Wave 5</color>",
+                    bcText: "<color=\"red\">Wave 5</color>",
                     supplySpawnInfos: new List<SupplySpawnInfo>
                     {
                         new SupplySpawnInfo(ItemType.SCP268, 1),
@@ -128,8 +128,8 @@ public class WaveConfig
                         new SupplySpawnInfo(ItemType.SCP500, 1),
                         new SupplySpawnInfo(ItemType.SCP268, 1),
                         new SupplySpawnInfo(ItemType.GunLogicer, 1),
-                        new SupplySpawnInfo(ItemType.ArmorHeavy, 2),
-                        new SupplySpawnInfo(ItemType.Ammo762x39, 5),
+                        new SupplySpawnInfo(ItemType.ArmorHeavy, 1),
+                        new SupplySpawnInfo(ItemType.Ammo762x39, 2),
 
                     },
                     enemySpawnInfos: new List<EnemySpawnInfo>
@@ -144,10 +144,9 @@ public class WaveConfig
                     bcText: "Wave 7",
                     supplySpawnInfos: new List<SupplySpawnInfo>
                     {
-                        new SupplySpawnInfo(ItemType.GunLogicer, 2),
                         new SupplySpawnInfo(ItemType.SCP500, 1),
-                        new SupplySpawnInfo(ItemType.Ammo762x39, 10),
-                        new SupplySpawnInfo(ItemType.ArmorHeavy, 2),
+                        new SupplySpawnInfo(ItemType.Ammo762x39, 2),
+                        new SupplySpawnInfo(ItemType.ArmorHeavy, 1),
 
                     },
                     enemySpawnInfos: new List<EnemySpawnInfo>
@@ -163,9 +162,9 @@ public class WaveConfig
                     bcText: "Wave 8",
                     supplySpawnInfos: new List<SupplySpawnInfo>
                     {
-                        new SupplySpawnInfo(ItemType.GunLogicer, 2),
+                        new SupplySpawnInfo(ItemType.GunLogicer, 1),
                         new SupplySpawnInfo(ItemType.SCP500, 1),
-                        new SupplySpawnInfo(ItemType.Ammo762x39, 10),
+                        new SupplySpawnInfo(ItemType.Ammo762x39, 4),
 
                     },
                     enemySpawnInfos: new List<EnemySpawnInfo>
@@ -185,7 +184,7 @@ public class WaveConfig
                         new SupplySpawnInfo(ItemType.GunSCP127, 1),
                         new SupplySpawnInfo(ItemType.SCP500, 1),
                         new SupplySpawnInfo(ItemType.SCP1344, 1),
-                        new SupplySpawnInfo(ItemType.Ammo762x39, 10),
+                        new SupplySpawnInfo(ItemType.Ammo762x39, 2),
 
                     },
                     enemySpawnInfos: new List<EnemySpawnInfo>
@@ -199,12 +198,13 @@ public class WaveConfig
             ),
             new WaveInfo(
                     intermissionTime: 20,
-                    bcText: "<color='red'>Wave 10</color>",
+                    bcText: "<color=\"red\">Wave 10</color>",
                     supplySpawnInfos: new List<SupplySpawnInfo>
                     {
-                        new SupplySpawnInfo(ItemType.ArmorCombat, 3),
+                        new SupplySpawnInfo(ItemType.ArmorCombat, 2),
                         new SupplySpawnInfo(ItemType.ArmorHeavy, 1),
                         new SupplySpawnInfo(ItemType.Ammo762x39, 10),
+                        new SupplySpawnInfo(ItemType.SCP268, 1),
 
                     },
                     enemySpawnInfos: new List<EnemySpawnInfo>
@@ -244,7 +244,7 @@ public class WaveConfig
                     {
                         new EnemySpawnInfo("Cloaker", 2, 8),
                         new EnemySpawnInfo("Scout", 10, 30),
-                        new EnemySpawnInfo("Demolisher", 2, 4),
+                        new EnemySpawnInfo("Demolisher", 1, 2.9f),
                     },
                     supplyGiveInfos: new List<ItemType>(){ ItemType.GunCrossvec, ItemType.Medkit, ItemType.Ammo9x19, ItemType.Ammo556x45, ItemType.Ammo9x19, ItemType.Ammo9x19 }
             ),
@@ -254,13 +254,12 @@ public class WaveConfig
                     supplySpawnInfos: new List<SupplySpawnInfo>
                     {
                         new SupplySpawnInfo(ItemType.SCP500, 1),
-
                     },
                     enemySpawnInfos: new List<EnemySpawnInfo>
                     {
                         new EnemySpawnInfo("Cloaker", 2, 8),
                         new EnemySpawnInfo("Scout", 10, 30),
-                        new EnemySpawnInfo("Demolisher", 2, 4),
+                        new EnemySpawnInfo("Demolisher", 1, 3.8f),
                         new EnemySpawnInfo("Tranquilizer", 2, 10),
                     },
                     supplyGiveInfos: new List<ItemType>(){ ItemType.GunCrossvec, ItemType.Medkit, ItemType.Ammo9x19, ItemType.Ammo556x45, ItemType.Ammo9x19, ItemType.Ammo9x19 }
@@ -271,13 +270,12 @@ public class WaveConfig
                     supplySpawnInfos: new List<SupplySpawnInfo>
                     {
                         new SupplySpawnInfo(ItemType.SCP500, 3),
-
                     },
                     enemySpawnInfos: new List<EnemySpawnInfo>
                     {
                         new EnemySpawnInfo("Cloaker", 3, 8),
                         new EnemySpawnInfo("Scout", 10, 30),
-                        new EnemySpawnInfo("Demolisher", 3, 6),
+                        new EnemySpawnInfo("Demolisher", 1, 3.8f),
                         new EnemySpawnInfo("Tranquilizer", 2, 10),
                         new EnemySpawnInfo("Pyromancer", 2, 5),
                     },
@@ -285,22 +283,23 @@ public class WaveConfig
             ),
             new WaveInfo(
                     intermissionTime: 30,
-                    bcText: "<color='red'>마지막 웨이브</color>",
+                    bcText: "<color=\"red\">마지막 웨이브</color>",
                     supplySpawnInfos: new List<SupplySpawnInfo>
                     {
-                        new SupplySpawnInfo(ItemType.GunLogicer, 2),
+                        new SupplySpawnInfo(ItemType.GunLogicer, 1),
                         new SupplySpawnInfo(ItemType.SCP500, 1),
-                        new SupplySpawnInfo(ItemType.Ammo762x39, 10),
+                        new SupplySpawnInfo(ItemType.Ammo762x39, 2),
+                        new SupplySpawnInfo(ItemType.SCP268, 1),
 
                     },
                     enemySpawnInfos: new List<EnemySpawnInfo>
                     {
                         new EnemySpawnInfo("Cloaker", 2, 6),
                         new EnemySpawnInfo("Scout", 5, 20),
-                        new EnemySpawnInfo("Demolisher", 2, 5),
+                        new EnemySpawnInfo("Demolisher", 1, 3.8f),
                         new EnemySpawnInfo("Tranquilizer", 1, 5),
                         new EnemySpawnInfo("Pyromancer", 2, 5),
-                        new EnemySpawnInfo("Juggernaut", 2, 5),
+                        new EnemySpawnInfo("Juggernaut", 2, 7),
                         new EnemySpawnInfo("Scout", 5, 20),
                     },
                     supplyGiveInfos: new List<ItemType>(){ ItemType.GunE11SR, ItemType.Medkit, ItemType.Ammo9x19, ItemType.Ammo556x45 }

@@ -43,13 +43,13 @@ namespace Enemies
         InventorySystem.Items.Firearms.Modules.MagazineModule magModule;
         public Tranquilizer(string enemyName, Vector3 spawnPos, int id, Dictionary<int, Enemy> container, int mulCount) : base(enemyName, spawnPos, id, container, mulCount)
         {
-            selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ChaosRepressor);
+            selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ChaosRepressor, SpawnReason.ForceClass);
             selfPlayer.EnableEffect<MovementBoost>(30, -1, false);
             selfPlayer.EnableEffect<SilentWalk>(200, -1, false);
             selfPlayer.EnableEffect<SpawnProtected>(5, true);
             selfPlayer.ClearInventory();
-            selfPlayer.MaxHealth = 150 + mulCount*5;//35명 -> 325HP
-            selfPlayer.Health = 150 + mulCount * 5;
+            selfPlayer.MaxHealth = 300 + mulCount*10;//35명 -> 650HP
+            selfPlayer.Health = 150 + mulCount * 10;
             fpc = selfPlayer.RoleManager.CurrentRole as IFpcRole;
 
             Firearm item = Firearm.Create(FirearmType.Com15);
