@@ -277,8 +277,6 @@ namespace PveExiled
                 yield return Timing.WaitForSeconds(1);
                 waveConfig.MulCount = GetAlivePlayerCount() - 1;
 
-                waveConfig.MulCount = 29;
-
                 int mulCount = waveConfig.MulCount;
                 Map.ShowHint("살아있는 플레이어 수: " + (mulCount + 1), duration: 10);
                 foreach (WaveConfig.SupplySpawnInfo itemInfo in waveInfo.SupplySpawnInfos)//보급품
