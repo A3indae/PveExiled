@@ -5,25 +5,28 @@ using System;
 
 using ServerEvents = Exiled.Events.Handlers.Server;
 
-public class Main : Plugin<Config>
+namespace PveExiled
 {
-    public override string Name { get; } = "PvE";
-    public override string Author { get; } = "A3indae";
-    public override Version Version { get; } = new Version(3,0);
-
-    RoundHandler roundHandler;
-    public override void OnEnabled()
+    public class Main : Plugin<Config>
     {
-        roundHandler = new RoundHandler();
-        ServerEvents.RoundStarted += roundHandler.OnRoundStarted;
-        ServerEvents.EndingRound += roundHandler.OnEndingRound;
+        public override string Name { get; } = "PvE";
+        public override string Author { get; } = "A3indae";
+        public override Version Version { get; } = new Version(3, 0);
 
-    }
-    public override void OnDisabled()
-    {
-        ServerEvents.RoundStarted -= roundHandler.OnRoundStarted;
-        ServerEvents.EndingRound -= roundHandler.OnEndingRound;
-        roundHandler.OnEndingRound();
-        roundHandler = null;
+        RoundHandler roundHandler;
+        public override void OnEnabled()
+        {
+            roundHandler = new RoundHandler();
+            ServerEvents.RoundStarted += roundHandler.OnRoundStarted;
+            ServerEvents.EndingRound += roundHandler.OnEndingRound;
+
+        }
+        public override void OnDisabled()
+        {
+            ServerEvents.RoundStarted -= roundHandler.OnRoundStarted;
+            ServerEvents.EndingRound -= roundHandler.OnEndingRound;
+            roundHandler.OnEndingRound();
+            roundHandler = null;
+        }
     }
 }

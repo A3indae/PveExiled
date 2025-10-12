@@ -18,13 +18,11 @@ using Exiled.Events.Handlers;
 using Exiled.API.Enums;
 using CustomPlayerEffects;
 
-namespace Enemies
+namespace PveExiled.Enemies
 {
     public class Demolisher : Enemy
     {
-        float range = 10;
         float raycastIgnoreRange = 8;
-        float fireRate = 0.5f;
         float updateDuration = 0.1f;
         bool canUse = true;
         float moveBackMinDist = 4f;
@@ -34,14 +32,17 @@ namespace Enemies
         CoroutineHandle enemyRootine;
 
         DummyAction? useAction;
-        public Demolisher(string enemyName, Vector3 spawnPos, int id, Dictionary<int, Enemy> container, int mulCount) : base(enemyName, spawnPos, id, container, mulCount)
+        public Demolisher(string enemyName, Vector3 spawnPos, int id, Dictionary<int, Enemy> container, WaveConfig waveConfig) : base(enemyName, spawnPos, id, container, waveConfig)
         {
+            range = 10;
+            range = range*range;
+            moveBackMinDist = moveBackMinDist * moveBackMinDist;
             selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ClassD, SpawnReason.ForceClass);
             selfPlayer.EnableEffect<MovementBoost>(35, -1, false);
             selfPlayer.EnableEffect<Scp207>(1, -1, false);
             selfPlayer.ClearInventory();
-            selfPlayer.MaxHealth = 100 + mulCount*5;//35명 -> 275HP
-            selfPlayer.Health = 100 + mulCount * 5;
+            selfPlayer.MaxHealth = 100 + waveConfig.MulCount* 5;//30명 -> 250HP
+            selfPlayer.Health = 100 + waveConfig.MulCount * 5;
             fpc = selfPlayer.RoleManager.CurrentRole as IFpcRole;
 
             pathCompCheckTime = 0.2f;
@@ -83,10 +84,10 @@ namespace Enemies
                 if (targetPlayer == null) continue;
 
                 Vector3 lookDirection = targetPlayer.Position - selfPlayer.Position;
-                if (lookDirection.magnitude > 0)
+                if (lookDirection.sqrMagnitude > 0)
                 {
-                    if (lookDirection.magnitude > range) continue;
-                    bool shootCast = Physics.Raycast(selfPlayer.Position, lookDirection.normalized, out RaycastHit hitInfo, maxDistance: lookDirection.magnitude, layerMask: LayerMask.GetMask("Default", "Door"), queryTriggerInteraction: QueryTriggerInteraction.Ignore);
+                    if (lookDirection.sqrMagnitude > range) continue;
+                    bool shootCast = Physics.Raycast(selfPlayer.Position, lookDirection.normalized, out RaycastHit _, maxDistance: lookDirection.magnitude, layerMask: mask, queryTriggerInteraction: QueryTriggerInteraction.Ignore);
                     if (shootCast && lookDirection.magnitude > raycastIgnoreRange) continue;
 
                     if (!useAction.HasValue)

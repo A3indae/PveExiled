@@ -17,24 +17,17 @@ using NetworkManagerUtils.Dummies;
 using Exiled.Events.Handlers;
 using Exiled.API.Enums;
 using CustomPlayerEffects;
-using Exiled.Events.EventArgs.Player;
-using Exiled.API.Features.Toys;
-using LabApi.Features.Wrappers;
-using CentralAuth;
+using InventorySystem.Items.Firearms.Attachments;
 
 namespace PveExiled.Enemies
 {
-    public class Juggernaut : Enemy
+    public class Gunner : Enemy
     {
         //float fireRate = 0.04f;//margin
         float updateDuration = 0.1f;
         float moveBackMinDist = 5f;
 
-        float chargeCool = 10;
-        float shootingMinTime = 7;
-
         bool shooting = false;
-        bool attackStateChangeable = true;
 
         CoroutineHandle followootine;
         CoroutineHandle targetSetRootine;
@@ -42,34 +35,25 @@ namespace PveExiled.Enemies
 
         DummyAction? holdAction;
         DummyAction? releaseAction;
-        DummyAction? aimAction;
-        DummyAction? unaimAction;
 
         InventorySystem.Items.Firearms.Firearm firearm;
         InventorySystem.Items.Firearms.Modules.MagazineModule magModule;
-        public Juggernaut(string enemyName, Vector3 spawnPos, int id, Dictionary<int, Enemy> container, WaveConfig waveConfig) : base(enemyName, spawnPos, id, container, waveConfig)
+        public Gunner(string enemyName, Vector3 spawnPos, int id, Dictionary<int, Enemy> container, WaveConfig waveConfig) : base(enemyName, spawnPos, id, container, waveConfig)
         {
-            range = 50;
+            range = 24;
             range = range * range;
             moveBackMinDist = moveBackMinDist * moveBackMinDist;
-            chargeCool = 10 - waveConfig.Difficulty * 3;
-            shootingMinTime = 7 + waveConfig.Difficulty * 4;
-            getCloserPlayerCycle = 2 - waveConfig.Difficulty*0.5f;
-            selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ChaosConscript, SpawnReason.ForceClass);
-            selfPlayer.EnableEffect<Slowness>(30, -1, false);
+            selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ClassD, SpawnReason.ForceClass);
             selfPlayer.EnableEffect<SpawnProtected>(3, true);
             selfPlayer.ClearInventory();
-            selfPlayer.MaxHealth = 600 + waveConfig.MulCount *55;//30명 -> 2250HP
-            selfPlayer.Health = 600 + waveConfig.MulCount * 55;
+            selfPlayer.MaxHealth = 100 + waveConfig .MulCount* 5;//30명 -> 250HP
+            selfPlayer.Health = 100 + waveConfig.MulCount * 5;
             fpc = selfPlayer.RoleManager.CurrentRole as IFpcRole;
 
-            selfPlayer.Inventory.ServerAddItem(ItemType.ArmorHeavy, ItemAddReason.AdminCommand);
-            Firearm item = Firearm.Create(FirearmType.Logicer);
-            item.Give(selfPlayer);
-            selfPlayer.Inventory.ServerSelectItem(item.Serial);
-            firearm = item.Base;
+            ItemBase item = selfPlayer.Inventory.ServerAddItem(ItemType.GunA7, ItemAddReason.AdminCommand);
+            selfPlayer.Inventory.ServerSelectItem(item.ItemSerial);
+            firearm = item as InventorySystem.Items.Firearms.Firearm;
             firearm.TryGetModule<MagazineModule>(out magModule);
-            item.Inaccuracy = 0;
 
             selfPlayer.Position = spawnPos;
             Timing.CallDelayed(0.5f, () => {
@@ -78,6 +62,7 @@ namespace PveExiled.Enemies
                 targetSetRootine = Timing.RunCoroutine(RerollTarget());
                 followootine = Timing.RunCoroutine(FollowLoop());
                 enemyRootine = Timing.RunCoroutine(EnemyFunction());
+                magModule.ServerModifyAmmo(50);
             });
         }
         public override void RemoveEnemy()
@@ -106,20 +91,6 @@ namespace PveExiled.Enemies
                     if (a.Name.EndsWith("Shoot->Click")) { releaseAction = a; break; }
                 }
             }
-            if (!aimAction.HasValue)
-            {
-                foreach (DummyAction a in DummyActionCollector.ServerGetActions(hub))
-                {
-                    if (a.Name.EndsWith("Zoom->Hold")) { aimAction = a; break; }
-                }
-            }
-            if (!unaimAction.HasValue)
-            {
-                foreach (DummyAction a in DummyActionCollector.ServerGetActions(hub))
-                {
-                    if (a.Name.EndsWith("Zoom->Click")) { unaimAction = a; break; }
-                }
-            }
         }
         public void ReleaseTrigger()
         {
@@ -127,9 +98,6 @@ namespace PveExiled.Enemies
             {
                 shooting = false;
                 releaseAction.Value.Action();
-                unaimAction.Value.Action();
-                attackStateChangeable = false;
-                Timing.CallDelayed(chargeCool, () => attackStateChangeable = true);
             }
         }
 
@@ -143,12 +111,6 @@ namespace PveExiled.Enemies
 
                 //Shoot판단
                 Vector3 lookDirection = targetPlayer.Position - selfPlayer.Position;
-                if (followEnabled && lookDirection.sqrMagnitude < moveBackMinDist)
-                {
-                    followEnabled = false;
-                    Timing.CallDelayed(1, () => followEnabled = true);
-                }
-                if (!attackStateChangeable) { magModule.ServerModifyAmmo(50); continue; }
                 if (lookDirection.sqrMagnitude > 0)
                 {
                     if (lookDirection.sqrMagnitude > range)//사거리 밖
@@ -162,19 +124,20 @@ namespace PveExiled.Enemies
                         ReleaseTrigger();
                         continue;
                     }
-                    magModule.ServerModifyAmmo(50);
-
+                    if (followEnabled && lookDirection.sqrMagnitude < moveBackMinDist)
+                    {
+                        followEnabled = false;
+                        Timing.CallDelayed(1, () => { if (removed) return; followEnabled = true; });
+                    }
+                    if (magModule.AmmoStored <= 20)
+                    {
+                        magModule.ServerModifyAmmo(50);
+                    }
                     if (shooting) continue;
 
                     shooting = true;
-                    attackStateChangeable = false;
                     NullActionCheck();
-                    aimAction.Value.Action();
-                    Timing.CallDelayed(3, () => {
-                        if (removed) return;
-                        holdAction.Value.Action();
-                        Timing.CallDelayed(shootingMinTime, () => { if (removed) return; attackStateChangeable = true; });
-                    });
+                    holdAction.Value.Action();
                 }
             }
         }

@@ -17,13 +17,14 @@ using NetworkManagerUtils.Dummies;
 using Exiled.Events.Handlers;
 using Exiled.API.Enums;
 using CustomPlayerEffects;
+using Respawning.Config;
 
-namespace Enemies
+namespace PveExiled.Enemies
 {
     public class Tranquilizer : Enemy
     {
-        float range = 30;
         float fireRate = 2f;
+        float aimTime = 3f;
         float updateDuration = 0.1f;
         float moveBackMinDist = 20;
 
@@ -41,15 +42,19 @@ namespace Enemies
 
         InventorySystem.Items.Firearms.Firearm firearm;
         InventorySystem.Items.Firearms.Modules.MagazineModule magModule;
-        public Tranquilizer(string enemyName, Vector3 spawnPos, int id, Dictionary<int, Enemy> container, int mulCount) : base(enemyName, spawnPos, id, container, mulCount)
+        public Tranquilizer(string enemyName, Vector3 spawnPos, int id, Dictionary<int, Enemy> container, WaveConfig waveConfig) : base(enemyName, spawnPos, id, container, waveConfig)
         {
+            range = 40;
+            range = range * range;
+            moveBackMinDist = moveBackMinDist * moveBackMinDist;
+            aimTime = 3f - waveConfig.Difficulty * 0.8f;
             selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ChaosRepressor, SpawnReason.ForceClass);
             selfPlayer.EnableEffect<MovementBoost>(30, -1, false);
             selfPlayer.EnableEffect<SilentWalk>(200, -1, false);
             selfPlayer.EnableEffect<SpawnProtected>(5, true);
             selfPlayer.ClearInventory();
-            selfPlayer.MaxHealth = 300 + mulCount*10;//35명 -> 650HP
-            selfPlayer.Health = 150 + mulCount * 10;
+            selfPlayer.MaxHealth = 300 + waveConfig.MulCount *10;//35명 -> 650HP
+            selfPlayer.Health = 300 + waveConfig.MulCount * 10;
             fpc = selfPlayer.RoleManager.CurrentRole as IFpcRole;
 
             Firearm item = Firearm.Create(FirearmType.Com15);
@@ -114,27 +119,27 @@ namespace Enemies
             {
                 yield return Timing.WaitForSeconds(updateDuration);
                 FollowAndLook();
-                if (targetPlayer == null || targetPlayer.Role.Type != PlayerRoles.RoleTypeId.NtfSergeant)
+                if (targetPlayer == null || targetPlayer.Role.Type != PlayerRoles.RoleTypeId.NtfSpecialist)
                 {
                     doUnzoom();
                     continue;
                 }
 
                 Vector3 lookDirection = targetPlayer.Position - selfPlayer.Position;
-                if (lookDirection.magnitude > 0)
+                if (lookDirection.sqrMagnitude > 0)
                 {
-                    if (lookDirection.magnitude > range)
+                    if (lookDirection.sqrMagnitude > range)
                     {
                         doUnzoom();
                         continue;
                     }
-                    bool shootCast = Physics.Raycast(selfPlayer.Position, lookDirection.normalized, out RaycastHit hitInfo, maxDistance: lookDirection.magnitude, layerMask: LayerMask.GetMask("Default", "Door"), queryTriggerInteraction: QueryTriggerInteraction.Ignore);
+                    bool shootCast = Physics.Raycast(selfPlayer.Position, lookDirection.normalized, out RaycastHit _, maxDistance: lookDirection.magnitude, layerMask: mask, queryTriggerInteraction: QueryTriggerInteraction.Ignore);
                     if (shootCast)
                     {
                         doUnzoom();
                         continue;
                     }
-                    if (followEnabled && lookDirection.magnitude < moveBackMinDist)
+                    if (followEnabled && lookDirection.sqrMagnitude < moveBackMinDist)
                     {
                         followEnabled = false;
                         Timing.CallDelayed(1, () => { if (removed) return; followEnabled = true; });
@@ -149,7 +154,7 @@ namespace Enemies
 
                         continue;
                     }
-                    else if ( Time.time - aimStartTime < 3) continue;
+                    else if ( Time.time - aimStartTime < aimTime) continue;
 
                     canShoot = false;
                     aiming = false;

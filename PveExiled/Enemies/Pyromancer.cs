@@ -17,12 +17,12 @@ using NetworkManagerUtils.Dummies;
 using Exiled.Events.Handlers;
 using Exiled.API.Enums;
 using CustomPlayerEffects;
+using RelativePositioning;
 
-namespace Enemies
+namespace PveExiled.Enemies
 {
     public class Pyromancer : Enemy
     {
-        float range = 15;
         //float fireRate = 0.04f;//margin
         float updateDuration = 0.1f;
         float moveBackMinDist = 5f;
@@ -36,16 +36,18 @@ namespace Enemies
 
         DummyAction? holdAction;
         DummyAction? releaseAction;
-        DummyAction? reloadAction;
 
         InventorySystem.Items.MicroHID.MicroHIDItem hid;
-        public Pyromancer(string enemyName, Vector3 spawnPos, int id, Dictionary<int, Enemy> container, int mulCount) : base(enemyName, spawnPos, id, container, mulCount)
+        public Pyromancer(string enemyName, Vector3 spawnPos, int id, Dictionary<int, Enemy> container, WaveConfig waveConfig) : base(enemyName, spawnPos, id, container, waveConfig)
         {
+            range = 15;
+            range = range * range;
+            moveBackMinDist = moveBackMinDist * moveBackMinDist;
             selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ChaosRepressor, SpawnReason.ForceClass);
             selfPlayer.EnableEffect<SpawnProtected>(5, true);
             selfPlayer.ClearInventory();
-            selfPlayer.MaxHealth = 250 + mulCount*12;//35명 -> 670HP
-            selfPlayer.Health = 250 + mulCount * 12;
+            selfPlayer.MaxHealth = 250 + waveConfig.MulCount *12;//35명 -> 670HP
+            selfPlayer.Health = 250 + waveConfig.MulCount * 12;
             fpc = selfPlayer.RoleManager.CurrentRole as IFpcRole;
 
             selfPlayer.Inventory.ServerAddItem(ItemType.ArmorHeavy, ItemAddReason.AdminCommand);
@@ -109,21 +111,21 @@ namespace Enemies
 
                 //Shoot판단
                 Vector3 lookDirection = targetPlayer.Position - selfPlayer.Position;
-                if (lookDirection.magnitude > 0)
+                if (lookDirection.sqrMagnitude > 0)
                 {
-                    if (lookDirection.magnitude > range)//사거리 밖
+                    if (lookDirection.sqrMagnitude > range)//사거리 밖
                     {
                         ReleaseTrigger();
                         continue;
                     }
-                    bool shootCast = Physics.Raycast(selfPlayer.Position, lookDirection.normalized, out RaycastHit hitInfo, maxDistance: lookDirection.magnitude, layerMask: LayerMask.GetMask("Default", "Door"), queryTriggerInteraction: QueryTriggerInteraction.Ignore);
-                    if (shootCast && lookDirection.magnitude>absShotRange)
+                    bool shootCast = Physics.Raycast(selfPlayer.Position, lookDirection.normalized, out RaycastHit _, maxDistance: lookDirection.magnitude, layerMask: mask, queryTriggerInteraction: QueryTriggerInteraction.Ignore);
+                    if (shootCast && lookDirection.magnitude >absShotRange)
                     {
                         ReleaseTrigger();
                         continue;
                     }
                     hid.EnergyManager.ServerSetEnergy(hid.ItemSerial, 100);
-                    if (followEnabled && lookDirection.magnitude < moveBackMinDist)
+                    if (!shootCast && followEnabled && lookDirection.sqrMagnitude < moveBackMinDist)
                     {
                         followEnabled = false;
                         Timing.CallDelayed(1, () => { if (removed) return; followEnabled = true; });
@@ -136,6 +138,31 @@ namespace Enemies
                     NullActionCheck();
                     holdAction.Value.Action();
                 }
+            }
+        }
+
+        protected override void FollowAndLook()
+        {
+            Vector3 direction = targetPosition - selfPlayer.Position;
+            direction.y = 0;
+            if (fpc == null)
+            {
+            }
+            if (direction.sqrMagnitude > 0)
+            {
+                if (followEnabled) fpc.FpcModule.Motor.ReceivedPosition = new RelativePosition(selfPlayer.Position + direction.normalized);
+                else fpc.FpcModule.Motor.ReceivedPosition = new RelativePosition(selfPlayer.Position - hub.transform.forward);
+            }
+            if (direction.sqrMagnitude < 0.25 || direction.sqrMagnitude > 100)
+            {
+                finished = true;
+            }
+
+            if (targetPlayer == null) return;
+            Vector3 lookDirection = targetPlayer.Position - selfPlayer.Position + Vector3.down*0.5f;
+            if (lookDirection.sqrMagnitude > 0)
+            {
+                fpc.FpcModule.MouseLook.LookAtDirection(lookDirection.normalized);
             }
         }
     }

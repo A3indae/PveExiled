@@ -1,8 +1,11 @@
 ﻿using Exiled;
 using Exiled.API.Interfaces;
 
-public class Config : IConfig
+namespace PveExiled
 {
-    public bool IsEnabled { get; set; } = true;
-    public bool Debug { get; set; } = true;
+    public class Config : IConfig
+    {
+        public bool IsEnabled { get; set; } = true;
+        public bool Debug { get; set; } = true;
+    }
 }

@@ -17,54 +17,59 @@ using NetworkManagerUtils.Dummies;
 using Exiled.Events.Handlers;
 using Exiled.API.Enums;
 using CustomPlayerEffects;
-using InventorySystem.Items.Firearms.Attachments;
+using Respawning.Config;
 
 namespace PveExiled.Enemies
 {
-    public class Scout : Enemy
+    public class Sniper : Enemy
     {
-        //float fireRate = 0.04f;//margin
+        float fireRate = 10f;
+        float aimTime = 5f;
         float updateDuration = 0.1f;
-        float moveBackMinDist = 5f;
+        float moveBackMinDist = 45;
 
-        bool shooting = false;
-        bool reloading = false;
+        bool canShoot = true;
+        bool aiming = false;
+        float aimStartTime = 0;
 
         CoroutineHandle followootine;
         CoroutineHandle targetSetRootine;
         CoroutineHandle enemyRootine;
 
-        DummyAction? holdAction;
-        DummyAction? releaseAction;
-        DummyAction? reloadAction;
+        DummyAction? shootAction;
+        DummyAction? zoomAction;
+        DummyAction? unzoomAction;
 
         InventorySystem.Items.Firearms.Firearm firearm;
         InventorySystem.Items.Firearms.Modules.MagazineModule magModule;
-        public Scout(string enemyName, Vector3 spawnPos, int id, Dictionary<int, Enemy> container, WaveConfig waveConfig) : base(enemyName, spawnPos, id, container, waveConfig)
+        public Sniper(string enemyName, Vector3 spawnPos, int id, Dictionary<int, Enemy> container, WaveConfig waveConfig) : base(enemyName, spawnPos, id, container, waveConfig)
         {
-            range = 24;
+            range = 60;
             range = range * range;
             moveBackMinDist = moveBackMinDist * moveBackMinDist;
-            selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ChaosConscript, SpawnReason.ForceClass);
-            selfPlayer.EnableEffect<SpawnProtected>(3, true);
+            aimTime = 8f - waveConfig.Difficulty * 3f;
+            selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ChaosRepressor, SpawnReason.ForceClass);
+            selfPlayer.EnableEffect<SilentWalk>(200, -1, false);
+            selfPlayer.EnableEffect<SpawnProtected>(5, true);
+            if (waveConfig.Difficulty == 2) { selfPlayer.EnableEffect<Scp1853>(4, true); fireRate = 7; }
             selfPlayer.ClearInventory();
-            selfPlayer.MaxHealth = 100 + waveConfig .MulCount* 5;//35명 -> 275HP
-            selfPlayer.Health = 100 + waveConfig.MulCount * 5;
+            selfPlayer.MaxHealth = 200 + waveConfig.MulCount *5;//30명 -> 350HP
+            selfPlayer.Health = 200 + waveConfig.MulCount * 5;
             fpc = selfPlayer.RoleManager.CurrentRole as IFpcRole;
 
-            ItemBase item = selfPlayer.Inventory.ServerAddItem(ItemType.GunCrossvec, ItemAddReason.AdminCommand);
-            selfPlayer.Inventory.ServerSelectItem(item.ItemSerial);
-            firearm = item as InventorySystem.Items.Firearms.Firearm;
+            Firearm item = Firearm.Create(FirearmType.ParticleDisruptor);
+            item.Give(selfPlayer);
+            selfPlayer.Inventory.ServerSelectItem(item.Serial);
+            firearm = item.Base;
             firearm.TryGetModule<MagazineModule>(out magModule);
 
             selfPlayer.Position = spawnPos;
-            Timing.CallDelayed(0.5f, () => {
+            Timing.CallDelayed(2f, () => {
                 if (removed) return;
                 NullActionCheck();
                 targetSetRootine = Timing.RunCoroutine(RerollTarget());
                 followootine = Timing.RunCoroutine(FollowLoop());
                 enemyRootine = Timing.RunCoroutine(EnemyFunction());
-                magModule.ServerModifyAmmo(50);
             });
         }
         public override void RemoveEnemy()
@@ -77,77 +82,62 @@ namespace PveExiled.Enemies
 
             base.RemoveEnemy();//인벤클리어&이벤트끊기&리스트제거
         }
-        public void NullActionCheck()
+        private void NullActionCheck()
         {
-            if (!holdAction.HasValue)
+            if (!shootAction.HasValue)
             {
                 foreach (DummyAction a in DummyActionCollector.ServerGetActions(hub))
                 {
-                    if (a.Name.EndsWith("Shoot->Hold")) { holdAction = a; break; }
+                    if (a.Name.EndsWith("Shoot->Click")) { shootAction = a; break; }
                 }
             }
-            if (!releaseAction.HasValue)
+            if (!zoomAction.HasValue)
             {
                 foreach (DummyAction a in DummyActionCollector.ServerGetActions(hub))
                 {
-                    if (a.Name.EndsWith("Shoot->Click")) { releaseAction = a; break; }
+                    if (a.Name.EndsWith("Zoom->Hold")) { zoomAction = a; break; }
                 }
             }
-            if (!reloadAction.HasValue)
+            if (!unzoomAction.HasValue)
             {
                 foreach (DummyAction a in DummyActionCollector.ServerGetActions(hub))
                 {
-                    if (a.Name.EndsWith("Reload->Click")) { reloadAction = a; break; }
+                    if (a.Name.EndsWith("Zoom->Click")) { unzoomAction = a; break; }
                 }
             }
         }
-        public void ReleaseTrigger()
+        private void doUnzoom()
         {
-            if (shooting)
-            {
-                shooting = false;
-                releaseAction.Value.Action();
-            }
-            if (magModule.AmmoStored < 10)
-            {
-                Reload();
-            }
+            if (!aiming) return;
+            aiming = false;
+            unzoomAction.Value.Action();
+            selfPlayer.DisableEffect<Slowness>();
+            canMove = true;
         }
-        public void Reload()
-        {
-            shooting = false;
-            reloading = true;
-            releaseAction.Value.Action();
-            Timing.CallDelayed(0.1f, () =>
-            {
-                if (removed) return;
-                selfPlayer.AddAmmo(AmmoType.Nato9, 1);
-                reloadAction.Value.Action();
-                Timing.CallDelayed(4, () => { if (removed) return; reloading = false; magModule.ServerModifyAmmo(50); }); ;
-            });
-        }
-
         private IEnumerator<float> EnemyFunction()
         {
             while (!removed)
             {
                 yield return Timing.WaitForSeconds(updateDuration);
                 FollowAndLook();
-                if (targetPlayer == null) continue;
+                if (targetPlayer == null || targetPlayer.Role.Type != PlayerRoles.RoleTypeId.NtfSpecialist)
+                {
+                    doUnzoom();
+                    continue;
+                }
 
-                //Shoot판단
                 Vector3 lookDirection = targetPlayer.Position - selfPlayer.Position;
                 if (lookDirection.sqrMagnitude > 0)
                 {
-                    if (lookDirection.sqrMagnitude > range)//사거리 밖
+                    if (lookDirection.sqrMagnitude > range)
                     {
-                        ReleaseTrigger();
+                        doUnzoom();
                         continue;
                     }
                     bool shootCast = Physics.Raycast(selfPlayer.Position, lookDirection.normalized, out RaycastHit _, maxDistance: lookDirection.magnitude, layerMask: mask, queryTriggerInteraction: QueryTriggerInteraction.Ignore);
                     if (shootCast)
                     {
-                        ReleaseTrigger();
+                        doUnzoom();
                         continue;
                     }
                     if (followEnabled && lookDirection.sqrMagnitude < moveBackMinDist)
@@ -155,18 +145,34 @@ namespace PveExiled.Enemies
                         followEnabled = false;
                         Timing.CallDelayed(1, () => { if (removed) return; followEnabled = true; });
                     }
-
-                    if (reloading) continue;
-                    if (magModule.AmmoStored <= 0)
+                    if (!canShoot) continue;
+                    if (!aiming)
                     {
-                        Reload();
+                        canMove = false;
+                        selfPlayer.EnableEffect<Slowness>(80, 0, false);
+                        aiming = true;
+                        aimStartTime = Time.time;
+                        NullActionCheck();
+                        zoomAction.Value.Action();
+
                         continue;
                     }
-                    if (shooting) continue;
+                    else if (Time.time - aimStartTime < aimTime)
+                    {
+                        if (!targetPlayer.IsEffectActive<Scanned>())
+                        {
+                            targetPlayer.EnableEffect<Scanned>(duration: 10, addDurationIfActive: true);
+                            targetPlayer.ShowHint("소름끼치는 시선이 느껴집니다..", 5);
+                        }
+                        continue;
+                    }
 
-                    shooting = true;
-                    NullActionCheck();
-                    holdAction.Value.Action();
+                    canShoot = false;
+
+                    shootAction.Value.Action();
+                    magModule.ServerModifyAmmo(5);
+                    Timing.CallDelayed(4, () => { if (removed) return; doUnzoom(); });
+                    Timing.CallDelayed(fireRate, () => { if (removed) return; canShoot = true; });
                 }
             }
         }

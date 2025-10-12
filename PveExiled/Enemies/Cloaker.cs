@@ -18,12 +18,11 @@ using Exiled.Events.Handlers;
 using Exiled.API.Enums;
 using CustomPlayerEffects;
 
-namespace Enemies
+namespace PveExiled.Enemies
 {
     public class Cloaker : Enemy
     {
         float visibleRange = 10;
-        float range = 1.5f;
         //float fireRate = 0.04f;//margin
         float updateDuration = 0.1f;
 
@@ -36,11 +35,13 @@ namespace Enemies
 
         DummyAction? holdAction;
         DummyAction? releaseAction;
-        DummyAction? reloadAction;
 
         InventorySystem.Items.Jailbird.JailbirdItem firearm;
-        public Cloaker(string enemyName, Vector3 spawnPos, int id, Dictionary<int, Enemy> container, int mulCount) : base(enemyName, spawnPos, id, container, mulCount)
+        public Cloaker(string enemyName, Vector3 spawnPos, int id, Dictionary<int, Enemy> container, WaveConfig waveConfig) : base(enemyName, spawnPos, id, container, waveConfig)
         {
+            range = 1.5f;
+            range = range * range;
+            visibleRange = visibleRange * visibleRange;
             selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ChaosConscript, SpawnReason.ForceClass);
             selfPlayer.EnableEffect<Invisible>(-1, false);
             selfPlayer.ClearInventory();
@@ -110,7 +111,7 @@ namespace Enemies
                 Vector3 lookDirection = targetPlayer.Position - selfPlayer.Position;
                 if (invisible)
                 {
-                    if (lookDirection.magnitude > visibleRange)//사거리 밖이면 continue
+                    if (lookDirection.sqrMagnitude > visibleRange)//사거리 밖이면 continue
                     {
                         continue;
                     }
@@ -120,7 +121,7 @@ namespace Enemies
                 }
                 else
                 {
-                    if (lookDirection.magnitude > visibleRange+2)//사거리 밖이면 invisible하고 continue
+                    if (lookDirection.sqrMagnitude > visibleRange+44)//사거리 밖이면 invisible하고 continue
                     {
                         selfPlayer.EnableEffect<Invisible>(-1, false);
                         selfPlayer.DisableEffect<MovementBoost>();
@@ -130,9 +131,9 @@ namespace Enemies
                     }
                 }
 
-                if (lookDirection.magnitude > 0)
+                if (lookDirection.sqrMagnitude > 0)
                 {
-                    if (lookDirection.magnitude > range)//사거리 밖
+                    if (lookDirection.sqrMagnitude > range)//사거리 밖
                     {
                         ReleaseTrigger();
                         continue;

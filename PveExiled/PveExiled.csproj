@@ -38,6 +38,9 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
+    <Reference Include="AudioPlayerApi">
+      <HintPath>..\..\..\AppData\Roaming\EXILED\Plugins\7777\AudioPlayerApi.dll</HintPath>
+    </Reference>
     <Reference Include="CommandSystem.Core, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SCP Secret Laboratory Dedicated Server\SCPSL_Data\Managed\CommandSystem.Core.dll</HintPath>
     </Reference>
@@ -71,7 +74,8 @@
     <Reference Include="Mono.Posix">
       <HintPath>..\..\..\AppData\Roaming\SCP Secret Laboratory\LabAPI\dependencies\global\Mono.Posix.dll</HintPath>
     </Reference>
-    <Reference Include="MultiBroadcast">
+    <Reference Include="MultiBroadcast, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\AppData\Roaming\EXILED\Plugins\7777\MultiBroadcast.dll</HintPath>
     </Reference>
     <Reference Include="Pooling">
@@ -102,6 +106,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Difficulty\Insane.cs" />
+    <Compile Include="Difficulty\Hard.cs" />
+    <Compile Include="Difficulty\Normal.cs" />
+    <Compile Include="Enemies\Striker.cs" />
+    <Compile Include="Enemies\Gunner.cs" />
+    <Compile Include="Enemies\Assassin.cs" />
+    <Compile Include="Enemies\Sniper.cs" />
+    <Compile Include="Enemies\Zombie.cs" />
+    <Compile Include="Enemies\Rifleman.cs" />
     <Compile Include="Enemies\Tranquilizer.cs" />
     <Compile Include="Enemies\Demolisher.cs" />
     <Compile Include="Enemies\Cloaker.cs" />
@@ -110,11 +123,19 @@
     <Compile Include="Enemies\Scout.cs" />
     <Compile Include="Enemies\ClassD.cs" />
     <Compile Include="Enemy.cs" />
+    <Compile Include="GlobalPlayer.cs" />
+    <Compile Include="SpecialWave.cs" />
+    <Compile Include="SpecialWaves\Upgraded.cs" />
+    <Compile Include="SpecialWaves\Mirrored.cs" />
+    <Compile Include="SpecialWaves\Blackout.cs" />
+    <Compile Include="SpecialWaves\Hangout.cs" />
+    <Compile Include="SpecialWaves\DemolisherRush.cs" />
     <Compile Include="WaveConfig.cs" />
     <Compile Include="RoundHandler.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
