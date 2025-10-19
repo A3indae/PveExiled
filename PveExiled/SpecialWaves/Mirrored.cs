@@ -9,7 +9,7 @@ using CustomPlayerEffects;
 using System.Linq;
 using InventorySystem;
 
-namespace PveExiled.SpecialWaves
+namespace SpecialWaves
 {
     public class Mirrored : SpecialWave
     {

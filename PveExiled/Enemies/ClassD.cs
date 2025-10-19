@@ -18,7 +18,7 @@ using Exiled.Events.Handlers;
 using Exiled.API.Enums;
 using CustomPlayerEffects;
 
-namespace PveExiled.Enemies
+namespace Enemies
 {
     public class ClassD : Enemy
     {

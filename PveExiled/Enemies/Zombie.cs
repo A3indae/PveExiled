@@ -19,7 +19,7 @@ using Exiled.API.Enums;
 using CustomPlayerEffects;
 using Respawning.Config;
 
-namespace PveExiled.Enemies
+namespace Enemies
 {
     public class Zombie : Enemy
     {

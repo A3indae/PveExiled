@@ -24,7 +24,7 @@ using RelativePositioning;
 using Exiled.API.Extensions;
 using LabApi.Features.Wrappers;
 
-namespace PveExiled.Enemies
+namespace Enemies
 {
     public class Striker : Enemy
     {

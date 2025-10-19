@@ -19,7 +19,7 @@ using Exiled.API.Enums;
 using CustomPlayerEffects;
 using InventorySystem.Items.Firearms.Attachments;
 
-namespace PveExiled.Enemies
+namespace Enemies
 {
     public class Scout : Enemy
     {

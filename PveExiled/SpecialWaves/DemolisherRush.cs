@@ -6,7 +6,7 @@ using PlayerEventArgs = Exiled.Events.EventArgs.Player;
 using PlayerEvents = Exiled.Events.Handlers.Player;
 using System.Linq;
 
-namespace PveExiled.SpecialWaves
+namespace SpecialWaves
 {
     public class DemolisherRush : SpecialWave
     {

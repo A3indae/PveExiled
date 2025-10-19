@@ -22,7 +22,7 @@ using Exiled.API.Features.Toys;
 using LabApi.Features.Wrappers;
 using CentralAuth;
 
-namespace PveExiled.Enemies
+namespace Enemies
 {
     public class Juggernaut : Enemy
     {

@@ -7,7 +7,7 @@ using Exiled.API.Features.Items;
 using Exiled.API.Structs;
 using InventorySystem.Items.Firearms.Attachments;
 
-namespace PveExiled.Difficulty
+namespace Difficulty
 {
     public class Hard : WaveConfig
     {

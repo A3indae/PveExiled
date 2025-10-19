@@ -5,7 +5,7 @@ using MapEventArgs = Exiled.Events.EventArgs.Map;
 using ServerEventArgs = Exiled.Events.EventArgs.Server;
 using Exiled.API.Features.Items;
 
-namespace PveExiled.Difficulty
+namespace Difficulty
 {
     public class Normal : WaveConfig
     {

@@ -9,7 +9,7 @@ using CustomPlayerEffects;
 using System.Linq;
 using NetworkManagerUtils.Dummies;
 
-namespace PveExiled.SpecialWaves
+namespace SpecialWaves
 {
     public class Hangout : SpecialWave
     {

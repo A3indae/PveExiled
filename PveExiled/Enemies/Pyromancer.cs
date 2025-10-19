@@ -19,7 +19,7 @@ using Exiled.API.Enums;
 using CustomPlayerEffects;
 using RelativePositioning;
 
-namespace PveExiled.Enemies
+namespace Enemies
 {
     public class Pyromancer : Enemy
     {
