@@ -25,7 +25,7 @@ using Exiled.API.Features.Spawn;
 using System;
 using System.CodeDom;
 using static PlayerList;
-
+using System.IO;
 
 public class RoundHandler
 {
@@ -36,14 +36,36 @@ public class RoundHandler
     public Vector3 playerSpawnPoint;
     public List<Vector3> enemySpawnPoints = new List<Vector3>();
     public Dictionary<int, Enemy> enemies = new Dictionary<int, Enemy>();//퍼블릭으로 바꿈
+    public string AudioFolder = "오디오파일이 들어있는 폴더의 경로";
 
     private CoroutineHandle runningRound;
     private SpecialWave specialWave;
     private int cursor = 0;
+
+    AudioPlayer globalBGM;
+
+    AudioPlayer glabalSFX;
+
     public void OnRoundStarted()
     {
-        //OnEndingRound();
+        OnEndingRound();
+
+        glabalSFX = AudioPlayer.CreateOrGet($"GlobalSFX", onIntialCreation: (p) =>
+        {
+            Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
+        });
+        globalBGM = AudioPlayer.CreateOrGet($"GlobalSFX", onIntialCreation: (p) =>
+        {
+            Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
+        });
+
         roundStarted = true;
+
+        foreach (string filePath in Directory.GetFiles(AudioFolder, "*.ogg", SearchOption.TopDirectoryOnly))
+        {
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
+            AudioClipStorage.LoadClip(filePath, fileName);
+        }
 
         NavMesh.RemoveAllNavMeshData();
 
@@ -119,6 +141,16 @@ public class RoundHandler
         Round.IsLocked = false;
 
         enemySpawnPoints.Clear();
+
+        if (globalBGM != null)
+        {
+            globalBGM.RemoveAllClips();
+            globalBGM.RemoveSpeaker("Main");
+            globalBGM.Destroy();
+            glabalSFX.RemoveAllClips();
+            glabalSFX.RemoveSpeaker("Main");
+            glabalSFX.Destroy();
+        }//destroyAudioplayer
 
         //이벤트해제
         if (waveConfig != null)
@@ -309,7 +341,7 @@ public class RoundHandler
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            if (wave < waveConfig.Waves.Length - 1 && UnityEngine.Random.value < 0.2f)
+            if (wave < waveConfig.Waves.Length - 1 && UnityEngine.Random.value < 1f)
             {
                 //스페셜웨이브
                 Type[] types = {
@@ -324,20 +356,20 @@ public class RoundHandler
 
                 mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: $"스페셜 웨이브: {specialWave.SpecialWaveName}");
 
-                GlobalPlayer.TryPlay("SpecialWaveSound.ogg", 1, false);
+                glabalSFX.AddClip("SpecialWaveSound");
 
                 yield return Timing.WaitForSeconds(7f);
 
-                GlobalPlayer.TryPlay(specialWave.SoundtrackName, 1, true);
+                globalBGM.AddClip(specialWave.SoundtrackName, loop:true);
                 specialWave.Enable(this, waveConfig, waveInfo);
                 while (!specialWave.Ended) yield return Timing.WaitForSeconds(1);//ㄱㄷ22
-                GlobalPlayer.TryStopAudio(specialWave.SoundtrackName);
+                globalBGM.RemoveClipByName(specialWave.SoundtrackName);
                 specialWave = null;
             }
             else
             {
                 mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: waveInfo.BCtext);
-                GlobalPlayer.TryPlay("WaveStartSound.ogg", 1, false);
+                glabalSFX.AddClip("WaveStartSound");
 
                 List<string> spawnQueue = new List<string>();
                 int maxEnemy = (int)(waveInfo.MaxEnemyCount + waveConfig.MulCount * waveInfo.MaxEnemyPerPlayer);
@@ -366,7 +398,7 @@ public class RoundHandler
                 while (enemies.Count > 0 && GetAlivePlayerCount() > 0) yield return Timing.WaitForSeconds(5);//ㄱㄷ
             }
             if (GetAlivePlayerCount() <= 0) { won = false; break; }
-            GlobalPlayer.TryPlay("WaveEndSound.ogg", 1, false);
+            glabalSFX.AddClip("WaveEndSound");
         }
         Map.Broadcast(message: won.ToString(), duration: 4);
         OnEndingRound();

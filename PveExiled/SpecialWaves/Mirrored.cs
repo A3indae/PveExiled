@@ -16,7 +16,7 @@ namespace SpecialWaves
         private CoroutineHandle runningSpecialWave;
 
         public override string SpecialWaveName { get; } = "<color=#dd11e0>반전</color>";
-        public override string SoundtrackName { get; } = "SWave_Mirrored.ogg";
+        public override string SoundtrackName { get; } = "SWave_Mirrored";
 
         public override void Enable(RoundHandler roundHandler, WaveConfig waveConfig, WaveConfig.WaveInfo waveInfo)
         {

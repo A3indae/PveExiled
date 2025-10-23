@@ -67,7 +67,7 @@ namespace Difficulty
                     },
                     enemySpawnInfos: new List<EnemySpawnInfo>
                     {
-                        new EnemySpawnInfo("Sniper", 2, 30),
+                        new EnemySpawnInfo("ClassD", 2, 30),
                     },
                     supplyGiveInfos: new List<ItemType>(){ItemType.KeycardChaosInsurgency},
                     maxEnemyCount:6,

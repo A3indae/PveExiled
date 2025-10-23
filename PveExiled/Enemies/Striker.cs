@@ -23,6 +23,7 @@ using Exiled.API.Interfaces;
 using RelativePositioning;
 using Exiled.API.Extensions;
 using LabApi.Features.Wrappers;
+using RemoteAdmin.Communication;
 
 namespace Enemies
 {
@@ -37,6 +38,8 @@ namespace Enemies
         int ChainCount = 5;
         float ChainDamage = 10;
         float ChainRangeSqr = 25;
+
+        AudioPlayer audioPlayer;
 
         CoroutineHandle followootine;
         CoroutineHandle targetSetRootine;
@@ -60,6 +63,14 @@ namespace Enemies
             selfPlayer.Health = 300 + waveConfig.MulCount * 10;
             fpc = selfPlayer.RoleManager.CurrentRole as IFpcRole;
 
+            audioPlayer = AudioPlayer.CreateOrGet($"Enemy {selfPlayer.Id}", onIntialCreation: (p) =>
+            {
+                p.transform.parent = selfPlayer.GameObject.transform;
+                Speaker speaker = p.AddSpeaker("Main", isSpatial: true, minDistance: 5f, maxDistance: 20f);
+                speaker.transform.parent = selfPlayer.GameObject.transform;
+                speaker.transform.localPosition = Vector3.zero;
+            });
+
             ItemBase item = selfPlayer.Inventory.ServerAddItem(ItemType.MicroHID, ItemAddReason.AdminCommand);
             selfPlayer.Inventory.ServerSelectItem(item.ItemSerial);
 
@@ -78,6 +89,13 @@ namespace Enemies
             Timing.KillCoroutines(targetSetRootine);
             Timing.KillCoroutines(followootine);
             Timing.KillCoroutines(enemyRootine);
+
+            if (audioPlayer != null)
+            {
+                audioPlayer.RemoveAllClips();
+                audioPlayer.RemoveSpeaker("Main");
+                audioPlayer.Destroy();
+            }//destroyAudioplayer
 
             foreach(Primitive primitive in primitives)
             {
@@ -137,8 +155,8 @@ namespace Enemies
 
         private void Attack(List<Exiled.API.Features.Player> players)
         {
-            GlobalPlayer.TryPlayOnPosition("Seige_Striker1.ogg", 2, false, selfPlayer.Position, 30);
-            GlobalPlayer.TryPlayOnPosition("Seige_Striker2.ogg", 2, false, selfPlayer.Position, 30);
+            audioPlayer.AddClip("Seige_Striker1");
+            audioPlayer.AddClip("Seige_Striker2");
 
             MakeChain(selfPlayer.Position, players[0].Position);
             for (int i = 1; i < players.Count; i++)

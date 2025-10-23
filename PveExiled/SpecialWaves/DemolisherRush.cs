@@ -14,7 +14,7 @@ namespace SpecialWaves
         private float damagerMultiplier = 1;
 
         public override string SpecialWaveName { get; } = "<color=\"orange\">데몰리셔 러쉬</color>";
-        public override string SoundtrackName { get; } = "SWave_DemRush.ogg";
+        public override string SoundtrackName { get; } = "SWave_DemRush";
 
         public override void Enable(RoundHandler roundHandler, WaveConfig waveConfig, WaveConfig.WaveInfo waveInfo)
         {

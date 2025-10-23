@@ -16,7 +16,7 @@ namespace SpecialWaves
         private CoroutineHandle runningSpecialWave;
 
         public override string SpecialWaveName { get; } = "<color=#00FFF6>지상 전투</color>";
-        public override string SoundtrackName { get; } = "SWave_Hangout.ogg";
+        public override string SoundtrackName { get; } = "SWave_Hangout";
 
         RoundHandler RoundHandler;
         List<Vector3> EnemySpawnPoints = new List<Vector3>();
