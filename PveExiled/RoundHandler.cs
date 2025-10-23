@@ -349,7 +349,7 @@ public class RoundHandler
                 yield return Timing.WaitForSeconds(1f);
             }
 
-            if (wave < waveConfig.Waves.Length - 1 && UnityEngine.Random.value < 1f)
+            if (wave < waveConfig.Waves.Length - 1 && UnityEngine.Random.value < 0.2f)
             {
                 //스페셜웨이브
                 Type[] types = {
