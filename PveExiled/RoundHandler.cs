@@ -36,7 +36,7 @@ public class RoundHandler
     public Vector3 playerSpawnPoint;
     public List<Vector3> enemySpawnPoints = new List<Vector3>();
     public Dictionary<int, Enemy> enemies = new Dictionary<int, Enemy>();//퍼블릭으로 바꿈
-    public string AudioFolder = "오디오파일이 들어있는 폴더의 경로";
+    public string AudioFolder = "오디오 파일이 들어있는 폴더의 경로를 적어주세요";
 
     private CoroutineHandle runningRound;
     private SpecialWave specialWave;
@@ -50,23 +50,14 @@ public class RoundHandler
     {
         OnEndingRound();
 
-        glabalSFX = AudioPlayer.CreateOrGet($"GlobalSFX", onIntialCreation: (p) =>
-        {
-            Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
-        });
-        globalBGM = AudioPlayer.CreateOrGet($"GlobalSFX", onIntialCreation: (p) =>
-        {
-            Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
-        });
-
         roundStarted = true;
 
-        foreach (string filePath in Directory.GetFiles(AudioFolder, "*.ogg", SearchOption.TopDirectoryOnly))
-        {
-            string fileName = Path.GetFileNameWithoutExtension(filePath);
-            if (!fileName.Contains("Wave") && !fileName.Contains("Seige")){ continue; }
-            AudioClipStorage.LoadClip(filePath, fileName);
-        }
+        //foreach (string filePath in Directory.GetFiles(AudioFolder, "*.ogg", SearchOption.TopDirectoryOnly))
+        //{
+        //    string fileName = Path.GetFileNameWithoutExtension(filePath);
+        //    if (!fileName.Contains("Wave") && !fileName.Contains("Seige")){ continue; }
+        //    AudioClipStorage.LoadClip(filePath, fileName);
+        //}
 
         NavMesh.RemoveAllNavMeshData();
 
@@ -89,7 +80,7 @@ public class RoundHandler
         foreach (Room room in Room.List)//Room for
         {
             if (room.Zone != ZoneType.Entrance) continue;
-            if (room.Type == RoomType.EzGateA || room.Type == RoomType.EzGateB || room.Type == RoomType.EzVent || room.Type == RoomType.EzCollapsedTunnel || room.Type == RoomType.EzShelter)
+            if (room.Type == RoomType.EzVent || room.Type == RoomType.EzCollapsedTunnel || room.Type == RoomType.EzShelter)
             {
                 if (room.Type == RoomType.EzCollapsedTunnel || room.Type == RoomType.EzShelter)
                 {
@@ -106,7 +97,7 @@ public class RoundHandler
                 playerSpawnPoint = room.Position + Vector3.up;
                 continue;
             }
-            if (room.Type == RoomType.EzCheckpointHallwayA || room.Type == RoomType.EzCheckpointHallwayB)
+            if (room.Type == RoomType.EzCheckpointHallwayA || room.Type == RoomType.EzCheckpointHallwayB || room.Type == RoomType.EzGateA || room.Type == RoomType.EzGateB)
             {
                 foreach (Door door in room.Doors)
                 {
@@ -141,12 +132,12 @@ public class RoundHandler
         roundStarted = false;
         Round.IsLocked = false;
 
-        foreach (string filePath in Directory.GetFiles(AudioFolder, "*.ogg", SearchOption.TopDirectoryOnly))
-        {
-            string fileName = Path.GetFileNameWithoutExtension(filePath);
-            if (!fileName.Contains("Wave") && !fileName.Contains("Seige")) { continue; }
-            AudioClipStorage.DestroyClip(fileName);
-        }//destroyAudioplayer
+        //foreach (string filePath in Directory.GetFiles(AudioFolder, "*.ogg", SearchOption.TopDirectoryOnly))
+        //{
+        //    string fileName = Path.GetFileNameWithoutExtension(filePath);
+        //    if (!fileName.Contains("Wave") && !fileName.Contains("Seige")) { continue; }
+        //    AudioClipStorage.DestroyClip(fileName);
+        //}//destroyAudioplayer
 
         enemySpawnPoints.Clear();
 
@@ -168,6 +159,7 @@ public class RoundHandler
             Exiled.Events.Handlers.Map.PlacingBulletHole -= waveConfig.OnPlacingBulletHole;
             Exiled.Events.Handlers.Server.RespawningTeam -= waveConfig.OnRespawningTeam;
             Exiled.Events.Handlers.Map.AnnouncingScpTermination -= waveConfig.OnAnnouncingScpTermination;
+            Exiled.Events.Handlers.Player.ChangingRole -= waveConfig.OnChangingRole;
         }
         waveConfig = null;
 
@@ -296,6 +288,17 @@ public class RoundHandler
             Exiled.Events.Handlers.Map.PlacingBulletHole += waveConfig.OnPlacingBulletHole;
             Exiled.Events.Handlers.Server.RespawningTeam += waveConfig.OnRespawningTeam;
             Exiled.Events.Handlers.Map.AnnouncingScpTermination += waveConfig.OnAnnouncingScpTermination;
+            Exiled.Events.Handlers.Player.ChangingRole += waveConfig.OnChangingRole;
+
+            //스피커생성
+            glabalSFX = AudioPlayer.CreateOrGet($"SeigeGlobalSFX", onIntialCreation: (p) =>
+            {
+                Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
+            });
+            globalBGM = AudioPlayer.CreateOrGet($"SeigeGlobalSFX", onIntialCreation: (p) =>
+            {
+                Speaker speaker = p.AddSpeaker("Main", isSpatial: false, maxDistance: 5000f);
+            });
         }
         yield return Timing.WaitForSeconds(5);
         bool won = true;
@@ -355,7 +358,7 @@ public class RoundHandler
                 Type[] types = {
                     typeof(SpecialWaves.Blackout),
                     typeof(SpecialWaves.DemolisherRush),
-                    typeof(SpecialWaves.Hangout),
+                    typeof(SpecialWaves.Spirit),
                     typeof(SpecialWaves.Mirrored),
                     typeof(SpecialWaves.Upgraded)};
 

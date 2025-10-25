@@ -36,7 +36,7 @@ namespace Enemies
         DummyAction? holdAction;
         DummyAction? releaseAction;
 
-        InventorySystem.Items.Jailbird.JailbirdItem firearm;
+        InventorySystem.Items.Scp1509.Scp1509Item firearm;
         public Cloaker(string enemyName, Vector3 spawnPos, int id, Dictionary<int, Enemy> container, WaveConfig waveConfig) : base(enemyName, spawnPos, id, container, waveConfig)
         {
             range = 1.5f;
@@ -51,9 +51,9 @@ namespace Enemies
             pathCompCheckTime = 0.1f;
 
             selfPlayer.Inventory.ServerAddItem(ItemType.ArmorHeavy, ItemAddReason.AdminCommand);
-            ItemBase item = selfPlayer.Inventory.ServerAddItem(ItemType.Jailbird, ItemAddReason.AdminCommand);
+            ItemBase item = selfPlayer.Inventory.ServerAddItem(ItemType.SCP1509, ItemAddReason.AdminCommand);
             selfPlayer.Inventory.ServerSelectItem(item.ItemSerial);
-            firearm = item as InventorySystem.Items.Jailbird.JailbirdItem;
+            firearm = item as InventorySystem.Items.Scp1509.Scp1509Item;
 
             selfPlayer.Position = spawnPos;
             Timing.CallDelayed(0.5f, () => {
@@ -138,7 +138,7 @@ namespace Enemies
                         ReleaseTrigger();
                         continue;
                     }
-                    firearm.ServerReset();
+                    //firearm.AcquisitionAlreadyReceived
 
                     if (shooting) continue;
                     shooting = true;

@@ -25,6 +25,14 @@ public abstract class WaveConfig
 
     public void OnAnnouncingScpTermination(MapEventArgs.AnnouncingScpTerminationEventArgs ev) { ev.IsAllowed = false; }
 
+    public void OnChangingRole(PlayerEventArgs.ChangingRoleEventArgs ev)
+    {
+        if (ev.Reason == Exiled.API.Enums.SpawnReason.Resurrected)
+        {
+            ev.IsAllowed = false;
+        }
+    }
+
     public abstract WaveInfo[] Waves { get; }
 
     //타입
