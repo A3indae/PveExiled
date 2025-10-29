@@ -47,7 +47,7 @@ namespace Enemies
             range = 60;
             range = range * range;
             moveBackMinDist = moveBackMinDist * moveBackMinDist;
-            aimTime = 8f - waveConfig.Difficulty * 3f;
+            aimTime = 7f - waveConfig.Difficulty * 3f;
             selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ChaosRepressor, SpawnReason.ForceClass);
             selfPlayer.EnableEffect<SilentWalk>(200, -1, false);
             selfPlayer.EnableEffect<SpawnProtected>(5, true);

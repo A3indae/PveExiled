@@ -14,7 +14,7 @@ namespace SpecialWaves
         private float damagerMultiplier = 1;
 
         public override string SpecialWaveName { get; } = "<color=\"orange\">데몰리셔 러쉬</color>";
-        public override string SoundtrackName { get; } = "SWave_DemRush";
+        public override string SoundtrackName { get; } = "SWave_DemRush.ogg";
 
         public override void Enable(RoundHandler roundHandler, WaveConfig waveConfig, WaveConfig.WaveInfo waveInfo)
         {
@@ -38,7 +38,7 @@ namespace SpecialWaves
             if (minEnemy >= maxEnemy) minEnemy = maxEnemy - 2;
             foreach (WaveConfig.EnemySpawnInfo spawnInfo in waveInfo.EnemySpawnInfos)//적 스폰
             {
-                for (int i = 0; i < (int)(spawnInfo.Amount + waveConfig.MulCount * spawnInfo.EnemyPerPlayer); i++)
+                for (int i = 0; i < (int)(spawnInfo.Amount + waveConfig.MulCount * spawnInfo.EnemyPerPlayer * 1.5f); i++)
                 {
                     spawnQueue.Add("Demolisher");
                 }

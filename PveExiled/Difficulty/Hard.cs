@@ -34,7 +34,7 @@ namespace Difficulty
                 case ItemType.GunLogicer: ev.DamageHandler.Damage *= 0.6f; break;
                 case ItemType.ParticleDisruptor: ev.DamageHandler.Damage *= 0.5f; break;
 
-                case ItemType.GunCrossvec: ev.DamageHandler.Damage *= 0.5f; break;
+                case ItemType.GunCrossvec: ev.DamageHandler.Damage *= 0.3f; break;
                 case ItemType.GunA7: ev.DamageHandler.Damage *= 0.2f; break;
                 case ItemType.GunAK: ev.DamageHandler.Damage *= 0.4f; break;
                 default: ev.DamageHandler.Damage *= 0.4f; break;

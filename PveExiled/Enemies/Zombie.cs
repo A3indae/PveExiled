@@ -43,9 +43,9 @@ namespace Enemies
             pathCompCheckTime = 0.15f;
             selfPlayer.Role.Set(PlayerRoles.RoleTypeId.Scp0492, SpawnReason.ForceClass, PlayerRoles.RoleSpawnFlags.All);
             selfPlayer.EnableEffect<SpawnProtected>(1, true);
-            selfMaxhealth = 250 + waveConfig.MulCount * 10;//30명 -> 550HP
-            selfPlayer.MaxHealth = 250 + selfMaxhealth;//30명 -> 550HP
-            selfPlayer.Health = 250 + selfMaxhealth;
+            selfMaxhealth = 200 + waveConfig.MulCount * 10;//30명 -> 500HP
+            selfPlayer.MaxHealth = selfMaxhealth;//30명 -> 500HP
+            selfPlayer.Health = selfMaxhealth;
             fpc = selfPlayer.RoleManager.CurrentRole as IFpcRole;
 
             selfPlayer.Position = spawnPos;
@@ -76,8 +76,8 @@ namespace Enemies
         {
             selfPlayer.Role.Set(PlayerRoles.RoleTypeId.Scp0492, SpawnReason.ForceClass, PlayerRoles.RoleSpawnFlags.None);
             selfPlayer.EnableEffect<SpawnProtected>(1, true);
-            selfPlayer.MaxHealth = 250 + selfMaxhealth;
-            selfPlayer.Health = 250 + selfMaxhealth;
+            selfPlayer.MaxHealth = selfMaxhealth;
+            selfPlayer.Health = selfMaxhealth;
             Timing.CallDelayed(0.5f, () =>
             {
                 if (removed) return;

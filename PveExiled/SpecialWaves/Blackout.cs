@@ -16,7 +16,7 @@ namespace SpecialWaves
         private CoroutineHandle runningSpecialWave;
 
         public override string SpecialWaveName { get; } = "<color=#000000>블랙아웃</color>";
-        public override string SoundtrackName { get; } = "SWave_Blackout";
+        public override string SoundtrackName { get; } = "SWave_Blackout.ogg";
 
         RoundHandler RoundHandler;
 
