@@ -59,8 +59,8 @@ namespace Enemies
             selfPlayer.EnableEffect<Slowness>(30, -1, false);
             selfPlayer.EnableEffect<SpawnProtected>(3, true);
             selfPlayer.ClearInventory();
-            selfPlayer.MaxHealth = 600 + waveConfig.MulCount *55;//30명 -> 2250HP
-            selfPlayer.Health = 600 + waveConfig.MulCount * 55;
+            selfPlayer.MaxHealth = 300 + waveConfig.MulCount *9;//30명 -> 570HP
+            selfPlayer.Health = 300 + waveConfig.MulCount * 9;
             fpc = selfPlayer.RoleManager.CurrentRole as IFpcRole;
 
             selfPlayer.Inventory.ServerAddItem(ItemType.ArmorHeavy, ItemAddReason.AdminCommand);

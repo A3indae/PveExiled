@@ -50,8 +50,8 @@ namespace Enemies
         public Striker(string enemyName, Vector3 spawnPos, int id, Dictionary<int, Enemy> container, WaveConfig waveConfig) : base(enemyName, spawnPos, id, container, waveConfig)
         {
             Damage = 6 + waveConfig.Difficulty * 2;
-            ChainDamage = 3 + waveConfig.Difficulty;
-            ChainCount = 3 + waveConfig.Difficulty;
+            ChainDamage = 5 + waveConfig.Difficulty;
+            ChainCount = 4 + waveConfig.Difficulty;
             range = 15;
             range = range * range;
             moveBackMinDist = moveBackMinDist * moveBackMinDist;
