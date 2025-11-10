@@ -36,7 +36,7 @@ public class RoundHandler
     public Vector3 playerSpawnPoint;
     public List<Vector3> enemySpawnPoints = new List<Vector3>();
     public Dictionary<int, Enemy> enemies = new Dictionary<int, Enemy>();//퍼블릭으로 바꿈
-    //public string AudioFolder = "오디오 파일이 들어있는 폴더의 경로를 적어주세요";
+    public string AudioFolder = "C:\\Users\\ykys\\Videos\\캡쳐\\Something";
 
     private CoroutineHandle runningRound;
     private SpecialWave specialWave;
@@ -56,7 +56,7 @@ public class RoundHandler
         //{
         //    string fileName = Path.GetFileNameWithoutExtension(filePath);
         //    if (!fileName.Contains("Wave") && !fileName.Contains("Seige")){ continue; }
-        //    AudioClipStorage.LoadClip(filePath, fileName);
+        //    AudioClipStorage.LoadClip(filePath, fileName+".ogg");
         //}
 
         NavMesh.RemoveAllNavMeshData();
@@ -106,6 +106,8 @@ public class RoundHandler
             }
         }
         foreach (Pickup pickup in Pickup.List) pickup.Destroy();
+        Warhead.DeadmanSwitchEnabled = false;
+        Warhead.IsLocked = true;
 
         var bounds = new Bounds(Vector3.zero, new Vector3(2000, 2000, 2000));
         var markups = new List<NavMeshBuildMarkup>();
@@ -367,7 +369,7 @@ public class RoundHandler
 
                 mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: $"스페셜 웨이브: {specialWave.SpecialWaveName}");
 
-                glabalSFX.AddClip("SpecialWaveSound.ogg");
+                glabalSFX.AddClip("SpecialWaveSound");
 
                 yield return Timing.WaitForSeconds(7f);
 
@@ -380,7 +382,7 @@ public class RoundHandler
             else
             {
                 mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: waveInfo.BCtext);
-                glabalSFX.AddClip("WaveStartSound.ogg");
+                glabalSFX.AddClip("WaveStartSound");
 
                 List<string> spawnQueue = new List<string>();
                 int maxEnemy = (int)(waveInfo.MaxEnemyCount + waveConfig.MulCount * waveInfo.MaxEnemyPerPlayer);
@@ -409,7 +411,7 @@ public class RoundHandler
                 while (enemies.Count > 0 && GetAlivePlayerCount() > 0) yield return Timing.WaitForSeconds(5);//ㄱㄷ
             }
             if (GetAlivePlayerCount() <= 0) { won = false; break; }
-            glabalSFX.AddClip("WaveEndSound.ogg");
+            glabalSFX.AddClip("WaveEndSound");
         }
         Map.Broadcast(message: won.ToString(), duration: 4);
         OnEndingRound();

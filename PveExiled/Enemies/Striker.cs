@@ -155,8 +155,8 @@ namespace Enemies
 
         private void Attack(List<Exiled.API.Features.Player> players)
         {
-            audioPlayer.AddClip("Seige_Striker1.ogg");
-            audioPlayer.AddClip("Seige_Striker2.ogg");
+            audioPlayer.AddClip("Seige_Striker1");
+            audioPlayer.AddClip("Seige_Striker2");
 
             MakeChain(selfPlayer.Position, players[0].Position);
             for (int i = 1; i < players.Count; i++)

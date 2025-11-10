@@ -16,7 +16,7 @@ namespace SpecialWaves
         private CoroutineHandle runningSpecialWave;
 
         public override string SpecialWaveName { get; } = "<color=#ff22dd>강화</color>";
-        public override string SoundtrackName { get; } = "SWave_Upgraded.ogg";
+        public override string SoundtrackName { get; } = "SWave_Upgraded";
 
         public override void Enable(RoundHandler roundHandler, WaveConfig waveConfig, WaveConfig.WaveInfo waveInfo)
         {
@@ -57,7 +57,7 @@ namespace SpecialWaves
                     case "Sniper": enemyName = "Sniper"; break;
                     default: enemyName = "Gunner"; break;
                 }
-                for (int i = 0; i < (int)((spawnInfo.Amount + waveConfig.MulCount * spawnInfo.EnemyPerPlayer)*0.6f); i++)
+                for (int i = 0; i < (int)((spawnInfo.Amount + waveConfig.MulCount * spawnInfo.EnemyPerPlayer)*0.75f); i++)
                 {
                     spawnQueue.Add(enemyName);
                 }

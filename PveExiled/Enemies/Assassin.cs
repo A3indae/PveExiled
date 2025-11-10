@@ -29,6 +29,8 @@ namespace Enemies
         float moveBackMinDist = 0.8f;
         float selfMaxHealth;
 
+        float detectRange = 12f;
+
         CoroutineHandle followootine;
         CoroutineHandle targetSetRootine;
         CoroutineHandle enemyRootine;
@@ -117,9 +119,13 @@ namespace Enemies
                 Vector3 lookDirection = targetPlayer.Position - selfPlayer.Position;
                 if (lookDirection.sqrMagnitude > 0)
                 {
+                    if (lookDirection.sqrMagnitude > detectRange) continue;
+                    if (!targetPlayer.IsEffectActive<Scp1344Detected>())
+                    {
+                        targetPlayer.EnableEffect<Scp1344Detected>(duration: 5, addDurationIfActive: true);
+                        targetPlayer.ShowHint("누군가 당신을 노리고 있습니다..", 5);
+                    }
                     if (lookDirection.sqrMagnitude > range) continue;
-                    bool shootCast = Physics.Raycast(selfPlayer.Position, lookDirection.normalized, out RaycastHit _, maxDistance: lookDirection.magnitude, layerMask: mask, queryTriggerInteraction: QueryTriggerInteraction.Ignore);
-                    if (shootCast) continue;
 
                     canShoot = false;
 

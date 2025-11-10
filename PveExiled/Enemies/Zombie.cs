@@ -43,8 +43,8 @@ namespace Enemies
             pathCompCheckTime = 0.15f;
             selfPlayer.Role.Set(PlayerRoles.RoleTypeId.Scp0492, SpawnReason.ForceClass, PlayerRoles.RoleSpawnFlags.All);
             selfPlayer.EnableEffect<SpawnProtected>(1, true);
-            selfMaxhealth = 200 + waveConfig.MulCount * 10;//30명 -> 500HP
-            selfPlayer.MaxHealth = selfMaxhealth;//30명 -> 500HP
+            selfMaxhealth = 150 + waveConfig.MulCount * 5;//30명 -> 300HP
+            selfPlayer.MaxHealth = selfMaxhealth;//30명 -> 300HP
             selfPlayer.Health = selfMaxhealth;
             fpc = selfPlayer.RoleManager.CurrentRole as IFpcRole;
 

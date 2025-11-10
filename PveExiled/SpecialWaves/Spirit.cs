@@ -16,7 +16,7 @@ namespace SpecialWaves
         private CoroutineHandle runningSpecialWave;
 
         public override string SpecialWaveName { get; } = "<color=#00FFF6>스피릿</color>";
-        public override string SoundtrackName { get; } = "SWave_Spirit.ogg";
+        public override string SoundtrackName { get; } = "SWave_Spirit";
 
         public override void Enable(RoundHandler roundHandler, WaveConfig waveConfig, WaveConfig.WaveInfo waveInfo)
         {
@@ -54,7 +54,7 @@ namespace SpecialWaves
                     Enemy enemy = roundHandler.enemies.Last().Value;
                     if (enemy != null && enemy.selfPlayer != null && !enemy.selfPlayer.IsScp && enemy.selfPlayer.Nickname != "Cloaker")
                     {
-                        enemy.selfPlayer.EnableEffect<Invisible>(1, -1, false);
+                        enemy.selfPlayer.EnableEffect<Fade>(255, -1, false);
                         enemy.selfPlayer.Health = enemy.selfPlayer.MaxHealth * 0.1f;
                     }
                 });
