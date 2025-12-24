@@ -52,12 +52,12 @@ public class RoundHandler
 
         roundStarted = true;
 
-        //foreach (string filePath in Directory.GetFiles(AudioFolder, "*.ogg", SearchOption.TopDirectoryOnly))
-        //{
-        //    string fileName = Path.GetFileNameWithoutExtension(filePath);
-        //    if (!fileName.Contains("Wave") && !fileName.Contains("Seige")){ continue; }
-        //    AudioClipStorage.LoadClip(filePath, fileName+".ogg");
-        //}
+        foreach (string filePath in Directory.GetFiles(AudioFolder, "*.ogg", SearchOption.TopDirectoryOnly))
+        {
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
+            if (!fileName.Contains("Wave") && !fileName.Contains("Seige")) { continue; }
+            AudioClipStorage.LoadClip(filePath, fileName + ".ogg");
+        }
 
         NavMesh.RemoveAllNavMeshData();
 
@@ -134,12 +134,12 @@ public class RoundHandler
         roundStarted = false;
         Round.IsLocked = false;
 
-        //foreach (string filePath in Directory.GetFiles(AudioFolder, "*.ogg", SearchOption.TopDirectoryOnly))
-        //{
-        //    string fileName = Path.GetFileNameWithoutExtension(filePath);
-        //    if (!fileName.Contains("Wave") && !fileName.Contains("Seige")) { continue; }
-        //    AudioClipStorage.DestroyClip(fileName);
-        //}//destroyAudioplayer
+        foreach (string filePath in Directory.GetFiles(AudioFolder, "*.ogg", SearchOption.TopDirectoryOnly))
+        {
+            string fileName = Path.GetFileNameWithoutExtension(filePath);
+            if (!fileName.Contains("Wave") && !fileName.Contains("Seige")) { continue; }
+            AudioClipStorage.DestroyClip(fileName);
+        }//destroyAudioplayer
 
         enemySpawnPoints.Clear();
 
