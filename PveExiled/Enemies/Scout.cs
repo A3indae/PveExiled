@@ -46,6 +46,7 @@ namespace Enemies
             range = range * range;
             moveBackMinDist = moveBackMinDist * moveBackMinDist;
             selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ChaosConscript, SpawnReason.ForceClass);
+            selfPlayer.IsSpectatable = false;
             selfPlayer.EnableEffect<SpawnProtected>(3, true);
             selfPlayer.ClearInventory();
             selfPlayer.MaxHealth = 100 + waveConfig .MulCount* 5;//35명 -> 275HP

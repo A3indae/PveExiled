@@ -41,6 +41,7 @@ namespace Enemies
             range = range * range;
             moveBackMinDist = moveBackMinDist * moveBackMinDist;
             pathCompCheckTime = 0.15f;
+            selfPlayer.IsSpectatable = false;
             selfPlayer.Role.Set(PlayerRoles.RoleTypeId.Scp0492, SpawnReason.ForceClass, PlayerRoles.RoleSpawnFlags.All);
             selfPlayer.EnableEffect<SpawnProtected>(1, true);
             selfMaxhealth = 150 + waveConfig.MulCount * 5;//30명 -> 300HP

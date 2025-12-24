@@ -70,12 +70,12 @@ public class RoundHandler
             ElevatorDoor Edoor = door as ElevatorDoor;
             BreakableDoor Bdoor = door as BreakableDoor;
             if (Edoor != null) { door.IsOpen = false; continue; }
-            if (Bdoor != null)
+            door.IsOpen = (door.Name != "INTERCOM" && door.Name != "Unsecured" && door.Type != DoorType.EscapePrimary);
+            if (Bdoor != null && !door.IsOpen)
             {
                 Bdoor.MaxHealth = 1000000;
                 Bdoor.Health = 1000000;
             }
-            door.IsOpen = (door.Name != "INTERCOM" && door.Name != "Unsecured" && door.Type != DoorType.EscapePrimary);
         }
         foreach (Room room in Room.List)//Room for
         {
@@ -199,7 +199,7 @@ public class RoundHandler
                     mbc.API.MultiBroadcast.AddMapBroadcast(1, $"<color=\"red\">투표권은 없습니다: {i}</color>");
                     yield return Timing.WaitForSeconds(1);
                 }
-                waveConfig = new Difficulty.Insane();
+                waveConfig = new Difficulty.Special();
             }
             else
             {
@@ -353,8 +353,37 @@ public class RoundHandler
                 mbc.API.MultiBroadcast.AddMapBroadcast(1, $"<size=20>다음 웨이브까지 남은 시간: {i}</size>");
                 yield return Timing.WaitForSeconds(1f);
             }
+            if (waveConfig.IsSpecial)
+            {
+                mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: waveInfo.BCtext);
 
-            if (wave < waveConfig.Waves.Length - 1 && UnityEngine.Random.value < 0.3f)
+                List<string> spawnQueue = new List<string>();
+                int maxEnemy = (int)(waveInfo.MaxEnemyCount + waveConfig.MulCount * waveInfo.MaxEnemyPerPlayer);
+                int minEnemy = (int)(waveInfo.MinEnemyCount + waveConfig.MulCount * waveInfo.MinEnemyPerPlayer);
+                if (minEnemy >= maxEnemy) minEnemy = maxEnemy - 2;
+                foreach (WaveConfig.EnemySpawnInfo spawnInfo in waveInfo.EnemySpawnInfos)//적 스폰
+                {
+                    for (int i = 0; i < (int)(spawnInfo.Amount + mulCount * spawnInfo.EnemyPerPlayer); i++)
+                    {
+                        spawnQueue.Add(spawnInfo.EnemyName);
+                    }
+                }
+                while (true)
+                {
+                    if (spawnQueue.Count <= 0) break;
+                    string random = spawnQueue.First();
+                    spawnQueue.Remove(random);
+                    SpawnEnemy(random);
+                    if (enemies.Count >= maxEnemy)
+                    {
+                        while (enemies.Count > minEnemy && GetAlivePlayerCount() > 0) yield return Timing.WaitForSeconds(5);
+                        if (GetAlivePlayerCount() <= 0) { yield return Timing.WaitForSeconds(1); break; }
+                    }
+                    else yield return Timing.WaitForSeconds(0.8f);
+                }
+                while (enemies.Count > 0 && GetAlivePlayerCount() > 0) yield return Timing.WaitForSeconds(5);//ㄱㄷ
+            }
+            else if (wave < waveConfig.Waves.Length - 1 && UnityEngine.Random.value < 0.3f)
             {
                 //스페셜웨이브
                 Type[] types = {
@@ -429,8 +458,11 @@ public class RoundHandler
                 if (player == null || player.Role.Type != RoleTypeId.NtfSpecialist) return;
                 player.ClearInventory();
                 player.Position = playerSpawnPoint;
-                player.Inventory.ServerAddItem(ItemType.GunCOM18, InventorySystem.Items.ItemAddReason.AdminCommand);
-                player.Inventory.ServerAddAmmo(ItemType.Ammo9x19, 120);
+                if (!waveConfig.IsSpecial)
+                {
+                    player.Inventory.ServerAddItem(ItemType.GunCOM18, InventorySystem.Items.ItemAddReason.AdminCommand);
+                    player.Inventory.ServerAddAmmo(ItemType.Ammo9x19, 120);
+                }
                 player.EnableEffect<HeavyFooted>(255, -1, false);
             });
         }

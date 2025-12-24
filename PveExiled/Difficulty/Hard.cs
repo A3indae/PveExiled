@@ -11,6 +11,7 @@ namespace Difficulty
 {
     public class Hard : WaveConfig
     {
+        public override bool IsSpecial { get; } = false;
         public override int Difficulty { get; } = 1;
         public override string DifficultyName { get; } = "<color=\"green\">어려움</color>";
 

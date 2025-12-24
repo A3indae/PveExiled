@@ -8,6 +8,7 @@ using Mirror;
 
 public abstract class WaveConfig
 {
+    public abstract bool IsSpecial { get; }
     public abstract int Difficulty { get; }
     public abstract string DifficultyName { get; }
 
@@ -30,6 +31,11 @@ public abstract class WaveConfig
         if (ev.Reason == Exiled.API.Enums.SpawnReason.Resurrected)
         {
             ev.IsAllowed = false;
+        }
+        if (!ev.Player.IsNPC && (ev.NewRole == PlayerRoles.RoleTypeId.Flamingo|| ev.NewRole == PlayerRoles.RoleTypeId.AlphaFlamingo))
+        {
+            ev.NewRole = PlayerRoles.RoleTypeId.NtfFlamingo;
+            ev.SpawnFlags = PlayerRoles.RoleSpawnFlags.None;
         }
     }
 

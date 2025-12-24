@@ -9,6 +9,7 @@ namespace Difficulty
 {
     public class Normal : WaveConfig
     {
+        public override bool IsSpecial { get; } = false;
         public override int Difficulty { get; } = 0;
         public override string DifficultyName { get; } = "<color=\"orange\">보통</color>";
 

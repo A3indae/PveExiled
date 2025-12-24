@@ -45,6 +45,7 @@ namespace Enemies
             range = 26;
             range = range * range;
             moveBackMinDist = moveBackMinDist * moveBackMinDist;
+            selfPlayer.IsSpectatable = false;
             selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ChaosRifleman, SpawnReason.ForceClass);
             selfPlayer.EnableEffect<SpawnProtected>(3, true);
             selfPlayer.ClearInventory();

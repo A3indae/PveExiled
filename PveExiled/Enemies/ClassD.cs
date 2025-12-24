@@ -41,6 +41,7 @@ namespace Enemies
             range = range * range;
             moveBackMinDist = moveBackMinDist * moveBackMinDist;
             selfPlayer.Role.Set(PlayerRoles.RoleTypeId.ClassD, SpawnReason.ForceClass);
+            selfPlayer.IsSpectatable = false;
             selfPlayer.EnableEffect<MovementBoost>(30, -1, false);
             selfPlayer.EnableEffect<SilentWalk>(200, -1, false);
             selfPlayer.EnableEffect<SpawnProtected>(3, true);

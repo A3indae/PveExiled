@@ -11,6 +11,7 @@ namespace Difficulty
 {
     public class Insane : WaveConfig
     {
+        public override bool IsSpecial { get; } = false;
         public override int Difficulty { get; } = 2;
         public override string DifficultyName { get; } = "<color=\"red\">지옥</color>";
 
