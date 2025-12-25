@@ -30,7 +30,7 @@ namespace Difficulty
 
             switch (ev.Attacker.CurrentItem.Type)
             {
-                case ItemType.Jailbird: ev.DamageHandler.Damage *= 0.5f; break;
+                case ItemType.SCP1509: ev.DamageHandler.Damage *= 0.5f; break;
                 case ItemType.MicroHID: ev.DamageHandler.Damage *= 0.2f; break;
                 case ItemType.GunLogicer: ev.DamageHandler.Damage *= 0.6f; break;
                 case ItemType.ParticleDisruptor: ev.DamageHandler.Damage *= 0.5f; break;
@@ -110,7 +110,7 @@ namespace Difficulty
                         new EnemySpawnInfo("Scout", 1, 15),
                         new EnemySpawnInfo("Cloaker", 0.5f, 2.8f),
                     },
-                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Painkillers},
+                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Painkillers},
                     maxEnemyCount:5,
                     maxMaxEnemyCount:15,
                     minEnemyCount:1,
@@ -128,7 +128,7 @@ namespace Difficulty
                         new EnemySpawnInfo("Scout", 1, 20),
                         new EnemySpawnInfo("Cloaker", 1, 2.8f),
                     },
-                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Painkillers},
+                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Painkillers},
                     maxEnemyCount:5,
                     maxMaxEnemyCount:15,
                     minEnemyCount:1,
@@ -171,7 +171,7 @@ namespace Difficulty
                         new EnemySpawnInfo("Zombie", 2, 12),
                         new EnemySpawnInfo("Cloaker", 0.5f, 2.8f),
                     },
-                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Painkillers, ItemType.Radio},
+                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Painkillers, ItemType.Radio},
                     maxEnemyCount:5,
                     maxMaxEnemyCount:20,
                     minEnemyCount:1,
@@ -191,7 +191,7 @@ namespace Difficulty
                         new EnemySpawnInfo("Zombie", 2, 12),
                         new EnemySpawnInfo("Cloaker", 0.5f, 2.8f),
                     },
-                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Painkillers, ItemType.Radio},
+                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Painkillers, ItemType.Radio},
                     maxEnemyCount:5,
                     maxMaxEnemyCount:20,
                     minEnemyCount:1,
@@ -239,7 +239,7 @@ namespace Difficulty
                         new EnemySpawnInfo("Tranquilizer", 1, 6),
                         new EnemySpawnInfo("Pyromancer", 1, 2),
                     },
-                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Medkit},
+                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Medkit},
                     maxEnemyCount:5,
                     maxMaxEnemyCount:20,
                     minEnemyCount:1,
@@ -261,7 +261,7 @@ namespace Difficulty
                         new EnemySpawnInfo("Pyromancer", 1, 4.8f),
                         new EnemySpawnInfo("Juggernaut", 1, 3.8f),
                     },
-                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Medkit},
+                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Medkit},
                     maxEnemyCount:5,
                     maxMaxEnemyCount:20,
                     minEnemyCount:1,
@@ -308,7 +308,7 @@ namespace Difficulty
                         new EnemySpawnInfo("Tranquilizer", 2, 8),
                         new EnemySpawnInfo("Pyromancer", 1, 3.8f),
                     },
-                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Medkit},
+                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Medkit},
                     maxEnemyCount:5,
                     maxMaxEnemyCount:26,
                     minEnemyCount:1,
@@ -331,7 +331,7 @@ namespace Difficulty
                         new EnemySpawnInfo("Demolisher", 0.5f, 2.8f),
                         new EnemySpawnInfo("Pyromancer", 1, 3.8f),
                     },
-                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Medkit},
+                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Medkit},
                     maxEnemyCount:5,
                     maxMaxEnemyCount:26,
                     minEnemyCount:1,
@@ -379,7 +379,7 @@ namespace Difficulty
                         new EnemySpawnInfo("Pyromancer", 1, 5.8f),
                         new EnemySpawnInfo("Juggernaut", 1, 3.8f),
                     },
-                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Medkit, ItemType.Radio},
+                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Medkit, ItemType.Radio},
                     maxEnemyCount:5,
                     maxMaxEnemyCount:26,
                     minEnemyCount:1,

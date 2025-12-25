@@ -112,6 +112,7 @@
     <Compile Include="Difficulty\Hard.cs" />
     <Compile Include="Difficulty\Normal.cs" />
     <Compile Include="Difficulty\Special.cs" />
+    <Compile Include="Enemies\Flamingo.cs" />
     <Compile Include="Enemies\Striker.cs" />
     <Compile Include="Enemies\Gunner.cs" />
     <Compile Include="Enemies\Assassin.cs" />

@@ -376,7 +376,7 @@ public class RoundHandler
                 {
                     if (spawnQueue.Count <= 0) break;
                     string random = spawnQueue.Last();
-                    spawnQueue.Remove(random);
+                    spawnQueue.RemoveAt(spawnQueue.Count - 1);
                     SpawnEnemy(random);
                     if (enemies.Count >= maxEnemy)
                     {
@@ -449,11 +449,11 @@ public class RoundHandler
         }
         if (won)
         {
-            mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: "<color=#a0a0ff>Site</color>-02 구성원들이 시설 방어에 성공했습니다.");
+            mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: "<color=#5050ff>Site-02</color> 구성원들이 시설 방어에 성공했습니다.");
         }
         else
         {
-            mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: "<color=#a0a0ff>Site</color>-02 시설이 <color=#a0ffb0>혼돈의 반란</color> 세력에게 점거당했습니다.");
+            mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: "<color=#5050ff>Site-02</color> 시설이 <color=#80ff80>혼돈의 반란</color> 세력에게 점거당했습니다.");
         }
         OnEndingRound();
     }
@@ -463,7 +463,7 @@ public class RoundHandler
         foreach (Player player in Player.List)
         {
             if (!IsValidPlayer(player)) continue;
-            if (player.Role.Type == RoleTypeId.NtfSpecialist) continue;
+            if (player.Role.Type == RoleTypeId.NtfSpecialist || player.Role.Type == RoleTypeId.NtfFlamingo) continue;
             player.Role.Set(RoleTypeId.NtfSpecialist, SpawnReason.ForceClass, RoleSpawnFlags.UseSpawnpoint);
             Timing.CallDelayed(0.5f, () =>
             {
@@ -497,6 +497,7 @@ public class RoundHandler
             case "Assassin": enemy = new Enemies.Assassin(enemyName, enemySpawnPoints.RandomItem<Vector3>(), cursor, enemies, waveConfig); break;
             case "Striker": enemy = new Enemies.Striker(enemyName, enemySpawnPoints.RandomItem<Vector3>(), cursor, enemies, waveConfig); break;
             case "Sniper": enemy = new Enemies.Sniper(enemyName, enemySpawnPoints.RandomItem<Vector3>(), cursor, enemies, waveConfig); break;
+            case "Flamingo": enemy = new Enemies.Flamingo(enemyName, enemySpawnPoints.RandomItem<Vector3>(), cursor, enemies, waveConfig); break;
             default: enemy = new Enemies.ClassD(enemyName, enemySpawnPoints.RandomItem<Vector3>(), cursor, enemies, waveConfig); break;
         }
         enemies.Add(cursor, enemy);

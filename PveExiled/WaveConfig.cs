@@ -22,7 +22,7 @@ public abstract class WaveConfig
         Timing.CallDelayed(5, ()=>{
             if (ev.Player == null) return;
             if (ev.Player.Role.Type != PlayerRoles.RoleTypeId.NtfSpecialist) return;
-            ev.Player.Role.Set(PlayerRoles.RoleTypeId.NtfFlamingo, Exiled.API.Enums.SpawnReason.ForceClass);
+            ev.Player.Role.Set(PlayerRoles.RoleTypeId.NtfFlamingo, Exiled.API.Enums.SpawnReason.ForceClass, PlayerRoles.RoleSpawnFlags.None);
         });
     }
 
@@ -45,11 +45,29 @@ public abstract class WaveConfig
         if (ev.Reason == Exiled.API.Enums.SpawnReason.Resurrected)
         {
             ev.IsAllowed = false;
+            return;
         }
-        if (!ev.Player.IsNPC && (ev.NewRole == PlayerRoles.RoleTypeId.Flamingo|| ev.NewRole == PlayerRoles.RoleTypeId.AlphaFlamingo))
+        if (ev.NewRole == PlayerRoles.RoleTypeId.Flamingo|| ev.NewRole == PlayerRoles.RoleTypeId.AlphaFlamingo)
         {
-            ev.NewRole = PlayerRoles.RoleTypeId.NtfFlamingo;
-            ev.SpawnFlags = PlayerRoles.RoleSpawnFlags.None;
+            ev.IsAllowed = false;
+            ev.Player.DisableEffect<BecomingFlamingo>();
+            return;
+        }
+        else if (ev.NewRole == PlayerRoles.RoleTypeId.NtfFlamingo && ev.Reason == Exiled.API.Enums.SpawnReason.ForceClass)
+        {
+            Timing.CallDelayed(0.5f, () =>
+            {
+                if (ev.Player == null || ev.Player.Role.Type != PlayerRoles.RoleTypeId.NtfFlamingo) return;
+                ev.Player.DisableEffect<BecomingFlamingo>();
+                ev.Player.EnableEffect<HeavyFooted>(255, -1, false);
+                ev.Player.EnableEffect<MovementBoost>(20, -1, false);
+                ev.Player.MaxHumeShield = 400;
+                ev.Player.HumeShield = 400;
+                ev.Player.HumeShieldRegenerationMultiplier = 10;
+                ev.Player.MaxHealth = 600;
+                ev.Player.Health = 600;
+            });
+            return;
         }
     }
 

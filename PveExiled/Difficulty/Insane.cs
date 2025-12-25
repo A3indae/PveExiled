@@ -29,7 +29,7 @@ namespace Difficulty
 
             switch (ev.Attacker.CurrentItem.Type)
             {
-                case ItemType.Jailbird: ev.DamageHandler.Damage *= 0.5f; break;
+                case ItemType.SCP1509: ev.DamageHandler.Damage *= 0.5f; break;
                 case ItemType.MicroHID: ev.DamageHandler.Damage *= 0.3f; break;
                 case ItemType.GunLogicer: ev.DamageHandler.Damage *= 0.9f; break;
                 case ItemType.ParticleDisruptor: ev.DamageHandler.Damage *= 0.5f; break;
@@ -115,7 +115,7 @@ namespace Difficulty
                         new EnemySpawnInfo("Zombie", 1, 6),
                         new EnemySpawnInfo("Cloaker", 0.5f, 2),
                     },
-                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Medkit},
+                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Medkit},
                     maxEnemyCount:5,
                     maxMaxEnemyCount:15,
                     minEnemyCount:1,
@@ -183,7 +183,7 @@ namespace Difficulty
                         new EnemySpawnInfo("Tranquilizer", 1, 3),
                         new EnemySpawnInfo("Pyromancer", 0.5f, 1.8f),
                     },
-                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Medkit, ItemType.Radio, ItemType.Ammo556x45, ItemType.Ammo556x45, ItemType.GunCrossvec},
+                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Medkit, ItemType.Radio, ItemType.Ammo556x45, ItemType.Ammo556x45, ItemType.GunCrossvec},
                     maxEnemyCount:5,
                     maxMaxEnemyCount:20,
                     minEnemyCount:1,
@@ -257,7 +257,7 @@ namespace Difficulty
                         new EnemySpawnInfo("Sniper", 1, 5),
                         new EnemySpawnInfo("Pyromancer", 0.5f, 1.8f),
                     },
-                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Medkit, ItemType.GunE11SR, ItemType.Ammo556x45, ItemType.Ammo556x45},
+                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Medkit, ItemType.GunE11SR, ItemType.Ammo556x45, ItemType.Ammo556x45},
                     maxEnemyCount:5,
                     maxMaxEnemyCount:20,
                     minEnemyCount:1,
@@ -336,7 +336,7 @@ namespace Difficulty
                         new EnemySpawnInfo("Pyromancer", 1, 2.8f),
                         new EnemySpawnInfo("Assassin", 0.5f, 1.8f),
                     },
-                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Medkit, ItemType.Ammo556x45, ItemType.Ammo556x45, ItemType.Ammo762x39, ItemType.Ammo762x39},
+                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Medkit, ItemType.Ammo556x45, ItemType.Ammo556x45, ItemType.Ammo762x39, ItemType.Ammo762x39},
                     maxEnemyCount:5,
                     maxMaxEnemyCount:24,
                     minEnemyCount:1,
@@ -417,7 +417,7 @@ namespace Difficulty
                         new EnemySpawnInfo("Assassin", 1, 1),
                         new EnemySpawnInfo("Striker", 1, 3.6f),
                     },
-                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Medkit, ItemType.Ammo556x45, ItemType.Ammo556x45, ItemType.Ammo762x39, ItemType.Ammo762x39, ItemType.Radio},
+                    supplyGiveInfos: new List<ItemType>(){ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Ammo9x19, ItemType.Medkit, ItemType.Ammo556x45, ItemType.Ammo556x45, ItemType.Ammo762x39, ItemType.Ammo762x39, ItemType.Radio},
                     maxEnemyCount:5,
                     maxMaxEnemyCount:24,
                     minEnemyCount:1,
