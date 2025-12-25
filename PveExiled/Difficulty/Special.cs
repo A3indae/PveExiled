@@ -45,7 +45,7 @@ namespace Difficulty
                 }
                 if (ev.DamageHandler.Type == Exiled.API.Enums.DamageType.SnowBall)
                 {
-                    if (ev.DamageHandler.Damage > 50)//헤드샷+차징
+                    if (ev.DamageHandler.Damage > 25)//헤드샷 || 차징
                     {
                         //Map.Explode(ev.Player.Position, Exiled.API.Enums.ProjectileType.FragGrenade, ev.Attacker);
                         ev.DamageHandler.Damage *= 10;
