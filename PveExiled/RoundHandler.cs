@@ -26,6 +26,7 @@ using System;
 using System.CodeDom;
 using static PlayerList;
 using System.IO;
+using static WaveConfig;
 
 public class RoundHandler
 {
@@ -130,7 +131,6 @@ public class RoundHandler
     public void OnEndingRound()//라운드종료
     {
         if (!roundStarted) return;
-        Map.Broadcast(message: "라종", duration: 4);
         roundStarted = false;
         Round.IsLocked = false;
 
@@ -162,6 +162,8 @@ public class RoundHandler
             Exiled.Events.Handlers.Server.RespawningTeam -= waveConfig.OnRespawningTeam;
             Exiled.Events.Handlers.Map.AnnouncingScpTermination -= waveConfig.OnAnnouncingScpTermination;
             Exiled.Events.Handlers.Player.ChangingRole -= waveConfig.OnChangingRole;
+            Exiled.Events.Handlers.Player.ThrownProjectile -= waveConfig.OnThrownProjectile;
+            Exiled.Events.Handlers.Scp1507.UsingTape -= waveConfig.OnUsingTape; 
         }
         waveConfig = null;
 
@@ -187,7 +189,7 @@ public class RoundHandler
         yield return Timing.WaitForSeconds(3);
 
         {//투표블럭
-            if (UnityEngine.Random.value < 0.15f)
+            if (UnityEngine.Random.value < 1f)
             {
                 foreach (Player player in Player.List)//투표스폰
                 {
@@ -291,6 +293,8 @@ public class RoundHandler
             Exiled.Events.Handlers.Server.RespawningTeam += waveConfig.OnRespawningTeam;
             Exiled.Events.Handlers.Map.AnnouncingScpTermination += waveConfig.OnAnnouncingScpTermination;
             Exiled.Events.Handlers.Player.ChangingRole += waveConfig.OnChangingRole;
+            Exiled.Events.Handlers.Player.ThrownProjectile += waveConfig.OnThrownProjectile;
+            Exiled.Events.Handlers.Scp1507.UsingTape += waveConfig.OnUsingTape;
 
             //스피커생성
             glabalSFX = AudioPlayer.CreateOrGet($"SeigeGlobalSFX", onIntialCreation: (p) =>
@@ -371,7 +375,7 @@ public class RoundHandler
                 while (true)
                 {
                     if (spawnQueue.Count <= 0) break;
-                    string random = spawnQueue.First();
+                    string random = spawnQueue.Last();
                     spawnQueue.Remove(random);
                     SpawnEnemy(random);
                     if (enemies.Count >= maxEnemy)
@@ -439,10 +443,18 @@ public class RoundHandler
                 }
                 while (enemies.Count > 0 && GetAlivePlayerCount() > 0) yield return Timing.WaitForSeconds(5);//ㄱㄷ
             }
+
             if (GetAlivePlayerCount() <= 0) { won = false; break; }
             glabalSFX.AddClip("WaveEndSound");
         }
-        Map.Broadcast(message: won.ToString(), duration: 4);
+        if (won)
+        {
+            mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: "<color=#a0a0ff>Site</color>-02 구성원들이 시설 방어에 성공했습니다.");
+        }
+        else
+        {
+            mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: "<color=#a0a0ff>Site</color>-02 시설이 <color=#a0ffb0>혼돈의 반란</color> 세력에게 점거당했습니다.");
+        }
         OnEndingRound();
     }
 
@@ -496,7 +508,7 @@ public class RoundHandler
         foreach (Player player in Player.List)
         {
             if (!IsValidPlayer(player)) continue;
-            if (player.Role.Type != RoleTypeId.NtfSpecialist) continue;
+            if (player.Role.Type != RoleTypeId.NtfSpecialist && player.Role.Type != RoleTypeId.NtfFlamingo) continue;
             count++;
         }
         return count;
@@ -513,8 +525,11 @@ public class RoundHandler
     private bool IsAlivePlayer(Player player)
     {
         if (player == null) return false;
-        if (player.UserId == "ID_Dedicated" || player.UserId == "ID_Dummy" || player.IsNPC) return false;
-        if (player.Role.Type != RoleTypeId.NtfSpecialist) return false;
+        if (player.UserId == "ID_Dedicated" || player.UserId == "ID_Dummy" || player.IsNPC)
+        {
+            if (player.Nickname != "Tester") return false;
+        }
+        if (player.Role.Type != RoleTypeId.NtfSpecialist && player.Role.Type != RoleTypeId.NtfFlamingo) return false;
         return true;
     }
 }

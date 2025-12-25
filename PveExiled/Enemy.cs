@@ -193,8 +193,11 @@ public class Enemy
     protected bool IsTargetablePlayer(Player player)
     {
         if (player == null) return false;
-        if (player.UserId == "ID_Dedicated" || player.UserId == "ID_Dummy" || player.IsNPC) return false;
-        if (player.Role.Type != RoleTypeId.NtfSpecialist) return false;
+        if (player.UserId == "ID_Dedicated" || player.UserId == "ID_Dummy" || player.IsNPC)
+        {
+            if (player.Nickname != "Tester") return false;
+        }
+        if (player.Role.Type != RoleTypeId.NtfSpecialist && player.Role.Type != RoleTypeId.NtfFlamingo) return false;
         if (!hiddenDetect && player.IsEffectActive<Invisible>()) return false;
         return true;
     }

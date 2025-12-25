@@ -5,6 +5,8 @@ using MapEventArgs = Exiled.Events.EventArgs.Map;
 using ServerEventArgs = Exiled.Events.EventArgs.Server;
 using Exiled.API.Features.Items;
 using Mirror;
+using CustomPlayerEffects;
+using MEC;
 
 public abstract class WaveConfig
 {
@@ -13,6 +15,18 @@ public abstract class WaveConfig
     public abstract string DifficultyName { get; }
 
     public int MulCount { get; set; } = 1;
+
+    public void OnUsingTape(Exiled.Events.EventArgs.Scp1507.UsingTapeEventArgs ev)
+    {
+        ev.Player.EnableEffect<BecomingFlamingo>(5, true);
+        Timing.CallDelayed(5, ()=>{
+            if (ev.Player == null) return;
+            if (ev.Player.Role.Type != PlayerRoles.RoleTypeId.NtfSpecialist) return;
+            ev.Player.Role.Set(PlayerRoles.RoleTypeId.NtfFlamingo, Exiled.API.Enums.SpawnReason.ForceClass);
+        });
+    }
+
+    public virtual void OnThrownProjectile(PlayerEventArgs.ThrownProjectileEventArgs ev) { }
 
     public abstract void OnHurting(PlayerEventArgs.HurtingEventArgs ev);
     public void OnPickupAdded(MapEventArgs.PickupAddedEventArgs ev)

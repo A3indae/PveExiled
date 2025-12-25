@@ -6,6 +6,7 @@ using ServerEventArgs = Exiled.Events.EventArgs.Server;
 using Exiled.API.Features.Items;
 using Exiled.API.Structs;
 using InventorySystem.Items.Firearms.Attachments;
+using InventorySystem;
 
 namespace Difficulty
 {
@@ -13,13 +14,41 @@ namespace Difficulty
     {
         public override bool IsSpecial { get; } = true;
         public override int Difficulty { get; } = 2;
-        public override string DifficultyName { get; } = "<color=#d0d0ff>???</color>";
+        public override string DifficultyName { get; } = "<color=#c0c0ff>???</color>";
+
+        public override void OnThrownProjectile(PlayerEventArgs.ThrownProjectileEventArgs ev)
+        {
+            if (ev.Item.Type == ItemType.Snowball)
+            {
+                ev.Player.Inventory.ServerAddItem(ItemType.Snowball, InventorySystem.Items.ItemAddReason.AdminCommand);
+            }
+        }
 
         public override void OnHurting(PlayerEventArgs.HurtingEventArgs ev)
         {
             if (ev.Player == null) return;
             if (ev.Attacker == null) return;
-            if (!ev.Attacker.IsNPC) return;
+            if (ev.Attacker == ev.Player)
+            {
+                ev.IsAllowed = false; return;
+            }
+            if (!ev.Attacker.IsNPC)
+            {
+                if (ev.DamageHandler.Type == Exiled.API.Enums.DamageType.SnowBall)
+                {
+                    if (ev.DamageHandler.Damage > 25)
+                    {
+                        //Map.Explode(ev.Player.Position, Exiled.API.Enums.ProjectileType.FragGrenade, ev.Attacker);
+                        Throwable throwable = ev.Attacker.ThrowGrenade(Exiled.API.Enums.ProjectileType.FragGrenade, false);
+                        ExplosiveGrenade grenade = throwable as ExplosiveGrenade;
+                        grenade.FuseTime = 0f;
+                        grenade.Projectile.Position = ev.Player.Position;
+                        return;
+                    }
+                    ev.DamageHandler.Damage *= 6.5f; return;
+                }
+                return;
+            }
             if (ev.Player.IsNPC) { ev.IsAllowed = false; return; }
             if (ev.Attacker.CurrentItem == null)
             {
@@ -65,10 +94,11 @@ namespace Difficulty
                     supplySpawnInfos: new List<SupplySpawnInfo>
                     {
                         new SupplySpawnInfo(ItemType.ArmorHeavy, 1, 10),
+                        new SupplySpawnInfo(ItemType.SCP1507Tape, 1, 8),
                     },
                     enemySpawnInfos: new List<EnemySpawnInfo>
                     {
-                        new EnemySpawnInfo("Gunner", 1, 12),
+                        new EnemySpawnInfo("ClassD", 5, 60),
                     },
                     supplyGiveInfos: new List<ItemType>(){ItemType.Snowball, ItemType.Coal},
                     maxEnemyCount:5,
