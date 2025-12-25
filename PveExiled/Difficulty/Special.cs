@@ -7,6 +7,7 @@ using Exiled.API.Features.Items;
 using Exiled.API.Structs;
 using InventorySystem.Items.Firearms.Attachments;
 using InventorySystem;
+using MEC;
 
 namespace Difficulty
 {
@@ -20,7 +21,11 @@ namespace Difficulty
         {
             if (ev.Item.Type == ItemType.Snowball)
             {
-                ev.Player.Inventory.ServerAddItem(ItemType.Snowball, InventorySystem.Items.ItemAddReason.AdminCommand);
+                Timing.CallDelayed(1, () =>
+                {
+                    if (ev.Player == null || ev.Player.Role.Type != PlayerRoles.RoleTypeId.NtfSpecialist) return;
+                    ev.Player.Inventory.ServerAddItem(ItemType.Snowball, InventorySystem.Items.ItemAddReason.AdminCommand);
+                });
             }
         }
 
