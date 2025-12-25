@@ -55,18 +55,21 @@ public abstract class WaveConfig
         }
         else if (ev.NewRole == PlayerRoles.RoleTypeId.NtfFlamingo && ev.Reason == Exiled.API.Enums.SpawnReason.ForceClass)
         {
-            Timing.CallDelayed(0.5f, () =>
+            if (IsSpecial)
             {
-                if (ev.Player == null || ev.Player.Role.Type != PlayerRoles.RoleTypeId.NtfFlamingo) return;
-                ev.Player.DisableEffect<BecomingFlamingo>();
-                ev.Player.EnableEffect<HeavyFooted>(255, -1, false);
-                ev.Player.EnableEffect<MovementBoost>(20, -1, false);
-                ev.Player.MaxHumeShield = 400;
-                ev.Player.HumeShield = 400;
-                ev.Player.HumeShieldRegenerationMultiplier = 10;
-                ev.Player.MaxHealth = 600;
-                ev.Player.Health = 600;
-            });
+                Timing.CallDelayed(0.5f, () =>
+                {
+                    if (ev.Player == null || ev.Player.Role.Type != PlayerRoles.RoleTypeId.NtfFlamingo) return;
+                    ev.Player.DisableEffect<BecomingFlamingo>();
+                    ev.Player.EnableEffect<HeavyFooted>(255, -1, false);
+                    ev.Player.EnableEffect<MovementBoost>(20, -1, false);
+                    ev.Player.MaxHumeShield = 400;
+                    ev.Player.HumeShield = 400;
+                    ev.Player.HumeShieldRegenerationMultiplier = 10;
+                    ev.Player.MaxHealth = 600;
+                    ev.Player.Health = 600;
+                });
+            }
             return;
         }
     }
