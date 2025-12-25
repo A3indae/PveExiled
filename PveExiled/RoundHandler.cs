@@ -449,11 +449,11 @@ public class RoundHandler
         }
         if (won)
         {
-            mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: "<color=#5050ff>Site-02</color> 구성원들이 시설 방어에 성공했습니다.");
+            mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: "<color=#1010ff>Site-02</color> 구성원들이 시설 방어에 성공했습니다.");
         }
         else
         {
-            mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: "<color=#5050ff>Site-02</color> 시설이 <color=#80ff80>혼돈의 반란</color> 세력에게 점거당했습니다.");
+            mbc.API.MultiBroadcast.AddMapBroadcast(duration: 10, text: "<color=#1010ff>Site-02</color> 시설이 <color=#80ff80>혼돈의 반란</color> 세력에게 점령당했습니다.");
         }
         OnEndingRound();
     }
