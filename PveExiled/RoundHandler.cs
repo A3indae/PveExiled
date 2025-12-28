@@ -189,7 +189,7 @@ public class RoundHandler
         yield return Timing.WaitForSeconds(3);
 
         {//투표블럭
-            if (UnityEngine.Random.value < 0.5f)
+            if (UnityEngine.Random.value < 0.75f)
             {
                 foreach (Player player in Player.List)//투표스폰
                 {
