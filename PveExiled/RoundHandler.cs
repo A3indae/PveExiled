@@ -376,6 +376,10 @@ public class RoundHandler
                 {
                     if (spawnQueue.Count <= 0) break;
                     string random = spawnQueue.Last();
+                    if (spawnQueue.Count%20 == 0)
+                    {
+                        Exiled.API.Features.Map.CleanAllRagdolls();
+                    }
                     spawnQueue.RemoveAt(spawnQueue.Count - 1);
                     SpawnEnemy(random);
                     if (enemies.Count >= maxEnemy)
